@@ -40,4 +40,7 @@ CREATE INDEX IF NOT EXISTS ix_receivables_tenant_client
 CREATE INDEX IF NOT EXISTS ix_delinquencyrecords_tenant_client
     ON delinquencyrecords(tenantid, clientid);
 
+CREATE INDEX IF NOT EXISTS ix_sales_tenant_client
+    ON sales(tenantid, clientid);
+
 CREATE UNIQUE INDEX IF NOT EXISTS ux_users_email ON users(email);

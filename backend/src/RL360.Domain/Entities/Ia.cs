@@ -8,7 +8,7 @@ public sealed class MensagemConversaIa : Common.Entity, Common.IEmpresaProprieta
     public Guid IdConversa { get; private set; }
     public string Papel { get; private set; } = string.Empty;
     public string Conteudo { get; private set; } = string.Empty;
-    public string Modo { get; private set; } = "Demo";
+    public string Modo { get; private set; } = "Consultor";
 
     private MensagemConversaIa() { }
 

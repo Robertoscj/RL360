@@ -1,42 +1,44 @@
 {
   "format": 1,
   "restore": {
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj": {}
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj": {}
   },
   "projects": {
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj": {
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj",
+        "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj",
         "projectName": "RL360.Api",
-        "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj",
-        "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-        "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/obj/",
+        "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj",
+        "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj"
               }
             }
           }
@@ -51,10 +53,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
@@ -85,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -503,33 +506,35 @@
         }
       }
     },
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj": {
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj",
+        "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj",
         "projectName": "RL360.Application",
-        "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj",
-        "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-        "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/",
+        "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj",
+        "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj"
               }
             }
           }
@@ -544,10 +549,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "AutoMapper": {
@@ -595,7 +601,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -873,26 +879,28 @@
         }
       }
     },
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj": {
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj",
         "projectName": "RL360.Domain",
-        "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj",
-        "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-        "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/obj/",
+        "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj",
+        "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -907,10 +915,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -928,7 +937,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -1206,36 +1215,38 @@
         }
       }
     },
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj": {
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj",
         "projectName": "RL360.Infrastructure",
-        "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj",
-        "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-        "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/obj/",
+        "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj"
               },
-              "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj": {
-                "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj"
+              "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj": {
+                "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj"
               }
             }
           }
@@ -1250,10 +1261,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "BCrypt.Net-Next": {
@@ -1333,7 +1345,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -1611,26 +1623,28 @@
         }
       }
     },
-    "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj": {
+    "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj",
         "projectName": "RL360.Shared",
-        "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj",
-        "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-        "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/obj/",
+        "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj",
+        "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -1645,10 +1659,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "imports": [
             "net461",
@@ -1666,7 +1681,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

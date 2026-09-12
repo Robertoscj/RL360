@@ -19,8 +19,11 @@ public sealed class ModulosApiController(
     IValidator<RequisicaoGargalo> validadorGargalo) : ControladorBase(usuarioAtual)
 {
     [HttpGet("revenue")]
-    public async Task<IActionResult> ObterFaturamento(CancellationToken ct)
-        => OkComDados(await leitura.ObterFaturamentoAsync(ExigirIdEmpresa(), ct));
+    public async Task<IActionResult> ObterFaturamento(
+        [FromQuery] DateOnly? inicio,
+        [FromQuery] DateOnly? fim,
+        CancellationToken ct)
+        => OkComDados(await leitura.ObterFaturamentoAsync(ExigirIdEmpresa(), inicio, fim, ct));
 
     [HttpPost("revenue")]
     public async Task<IActionResult> RegistrarFaturamento([FromBody] RequisicaoFaturamento req, CancellationToken ct)
@@ -31,8 +34,11 @@ public sealed class ModulosApiController(
     }
 
     [HttpGet("sales")]
-    public async Task<IActionResult> ObterVendas(CancellationToken ct)
-        => OkComDados(await leitura.ObterVendasAsync(ExigirIdEmpresa(), ct));
+    public async Task<IActionResult> ObterVendas(
+        [FromQuery] DateOnly? inicio,
+        [FromQuery] DateOnly? fim,
+        CancellationToken ct)
+        => OkComDados(await leitura.ObterVendasAsync(ExigirIdEmpresa(), inicio, fim, ct));
 
     [HttpPost("sales")]
     public async Task<IActionResult> RegistrarVenda([FromBody] RequisicaoVenda req, CancellationToken ct)

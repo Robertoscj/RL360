@@ -203,3 +203,22 @@ CREATE TABLE IF NOT EXISTS smartinsights (
     createdatutc    TIMESTAMPTZ     NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
     updatedatutc    TIMESTAMPTZ     NULL
 );
+
+-- Relacionamentos da tela Radar de Lucro (vendas, inadimplência e fluxo de caixa → cliente)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_sales_clients') THEN
+        ALTER TABLE sales
+            ADD CONSTRAINT fk_sales_clients FOREIGN KEY (clientid) REFERENCES clients(id);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_delinquencyrecords_clients') THEN
+        ALTER TABLE delinquencyrecords
+            ADD CONSTRAINT fk_delinquencyrecords_clients FOREIGN KEY (clientid) REFERENCES clients(id);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_receivables_clients') THEN
+        ALTER TABLE receivables
+            ADD CONSTRAINT fk_receivables_clients FOREIGN KEY (clientid) REFERENCES clients(id);
+    END IF;
+END $$;

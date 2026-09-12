@@ -97,6 +97,16 @@ public sealed class ArmazenamentoDemo :
         => Task.FromResult<IReadOnlyList<SnapshotFaturamento>>(
             _faturamento.Where(f => f.IdEmpresa == idEmpresa).OrderByDescending(r => r.DataReferencia).Take(dias).OrderBy(r => r.DataReferencia).ToList());
 
+    Task<IReadOnlyList<SnapshotFaturamento>> IFaturamentoRepositorio.ObterPorPeriodoAsync(
+        Guid idEmpresa, DateOnly inicio, DateOnly fim, CancellationToken ct)
+        => Task.FromResult<IReadOnlyList<SnapshotFaturamento>>(
+            _faturamento
+                .Where(f => f.IdEmpresa == idEmpresa
+                    && DateOnly.FromDateTime(f.DataReferencia) >= inicio
+                    && DateOnly.FromDateTime(f.DataReferencia) <= fim)
+                .OrderBy(f => f.DataReferencia)
+                .ToList());
+
     public Task<SnapshotFaturamento> InserirAsync(SnapshotFaturamento snapshot, CancellationToken ct = default)
     {
         _faturamento.Add(snapshot);
@@ -105,6 +115,14 @@ public sealed class ArmazenamentoDemo :
 
     public Task<IReadOnlyList<Venda>> ObterMesAtualAsync(Guid idEmpresa, CancellationToken ct = default)
         => Task.FromResult<IReadOnlyList<Venda>>(_vendas.Where(v => v.IdEmpresa == idEmpresa).ToList());
+
+    Task<IReadOnlyList<Venda>> IVendaRepositorio.ObterPorPeriodoAsync(
+        Guid idEmpresa, DateOnly inicio, DateOnly fim, CancellationToken ct)
+        => Task.FromResult<IReadOnlyList<Venda>>(
+            _vendas.Where(v =>
+                v.IdEmpresa == idEmpresa
+                && DateOnly.FromDateTime(v.FechadaEmUtc) >= inicio
+                && DateOnly.FromDateTime(v.FechadaEmUtc) <= fim).ToList());
 
     public Task<Venda> InserirAsync(Venda venda, CancellationToken ct = default)
     {

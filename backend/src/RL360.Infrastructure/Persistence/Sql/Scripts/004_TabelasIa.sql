@@ -1,5 +1,5 @@
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'AiChatMessages')
-CREATE TABLE AiChatMessages (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'MensagensConversaIa')
+CREATE TABLE MensagensConversaIa (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     UserId          UNIQUEIDENTIFIER NOT NULL,
@@ -8,11 +8,11 @@ CREATE TABLE AiChatMessages (
     Content         NVARCHAR(MAX)    NOT NULL,
     Mode            NVARCHAR(30)     NOT NULL DEFAULT 'Demo',
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
-    CONSTRAINT FK_AiChatMessages_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_AiChatMessages_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'KnowledgeDocuments')
-CREATE TABLE KnowledgeDocuments (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'DocumentosConhecimento')
+CREATE TABLE DocumentosConhecimento (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Title           NVARCHAR(300)    NOT NULL,
@@ -21,11 +21,11 @@ CREATE TABLE KnowledgeDocuments (
     IsActive        BIT              NOT NULL DEFAULT 1,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_KnowledgeDocuments_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_KnowledgeDocuments_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_AiChatMessages_TenantUser')
 CREATE NONCLUSTERED INDEX IX_AiChatMessages_TenantUser
-    ON AiChatMessages(TenantId, UserId, CreatedAtUtc DESC);
+    ON MensagensConversaIa(TenantId, UserId, CreatedAtUtc DESC);
 
 GO

@@ -16,7 +16,7 @@ public sealed class ConversaIaRepositorio(IFabricaConexaoBanco fabrica, IDialect
             SELECT {prefixo} Id, TenantId AS IdEmpresa, UserId AS IdUsuario,
                    ConversationId AS IdConversa, Role AS Papel, Content AS Conteudo,
                    Mode AS Modo, CreatedAtUtc AS CriadoEmUtc
-            FROM AiChatMessages
+            FROM MensagensConversaIa
             WHERE TenantId = @idEmpresa AND UserId = @idUsuario
             ORDER BY CreatedAtUtc DESC{sufixo}",
             new { idEmpresa, idUsuario, limite }))
@@ -28,7 +28,7 @@ public sealed class ConversaIaRepositorio(IFabricaConexaoBanco fabrica, IDialect
     {
         using var db = fabrica.Criar();
         await db.ExecuteAsync(@"
-            INSERT INTO AiChatMessages
+            INSERT INTO MensagensConversaIa
                 (Id, TenantId, UserId, ConversationId, Role, Content, Mode, CreatedAtUtc)
             VALUES
                 (@Id, @IdEmpresa, @IdUsuario, @IdConversa, @Papel, @Conteudo, @Modo, @CriadoEmUtc)",
@@ -50,7 +50,7 @@ public sealed class ConversaIaRepositorio(IFabricaConexaoBanco fabrica, IDialect
     {
         using var db = fabrica.Criar();
         await db.ExecuteAsync(
-            "DELETE FROM AiChatMessages WHERE TenantId = @idEmpresa AND UserId = @idUsuario",
+            "DELETE FROM MensagensConversaIa WHERE TenantId = @idEmpresa AND UserId = @idUsuario",
             new { idEmpresa, idUsuario });
     }
 }
@@ -63,7 +63,7 @@ public sealed class DocumentoConhecimentoRepositorio(IFabricaConexaoBanco fabric
         return (await db.QueryAsync<DocumentoConhecimento>($@"
             SELECT Id, TenantId AS IdEmpresa, Title AS Titulo, Category AS Categoria,
                    Content AS Conteudo, IsActive AS Ativo, CreatedAtUtc AS CriadoEmUtc
-            FROM KnowledgeDocuments
+            FROM DocumentosConhecimento
             WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}",
             new { idEmpresa })).ToList();
     }

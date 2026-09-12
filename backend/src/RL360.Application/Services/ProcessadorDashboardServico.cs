@@ -28,7 +28,7 @@ public sealed class ProcessadorDashboardServico(
         var resumo = await dashboard.ObterResumoAsync(idEmpresa, forcarAtualizacao: true, ct: ct);
         await snapshots.PersistirAsync(idEmpresa, resumo, ct);
 
-        var faturamento = await modulos.ObterFaturamentoAsync(idEmpresa, ct);
+        var faturamento = await modulos.ObterFaturamentoAsync(idEmpresa, ct: ct);
         var plano = resumo.Rodape.PlanoAcao;
 
         await notificador.NotificarRadarAsync(radarDto, ct);

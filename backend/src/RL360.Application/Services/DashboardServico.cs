@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using RL360.Application.Abstractions;
+using RL360.Application.Services.Ia;
+using RL360.Domain.Entities;
 using RL360.Shared.Dtos;
 
 namespace RL360.Application.Services;
@@ -27,6 +29,8 @@ public sealed class DashboardServico(
     IPlanoAcaoRepositorio planoAcao,
     IInsightRepositorio insights,
     IEmpresaRepositorio empresas,
+    IContaReceberRepositorio contasReceber,
+    IFaturamentoRepositorio faturamento,
     ICacheServico cache,
     IMapper mapper,
     ILogger<DashboardServico> _) : IDashboardServico
@@ -46,17 +50,18 @@ public sealed class DashboardServico(
         if (!forcarAtualizacao)
         {
             var emCache = await cache.ObterAsync<ResumoDashboardDto>(chave, ct);
-            if (emCache is not null) return emCache;
+            if (emCache is not null) return ComInsightsVivos(emCache);
 
             var doSql = await snapshotServico.TentarObterDoSqlAsync(idEmpresa, ct);
             if (doSql is not null)
             {
-                await cache.DefinirAsync(chave, doSql, Ttl, ct);
-                return doSql;
+                var vivo = ComInsightsVivos(doSql);
+                await cache.DefinirAsync(chave, vivo, Ttl, ct);
+                return vivo;
             }
         }
 
-        var resumo = await MontarResumoAsync(idEmpresa, inicio, fim, forcarAtualizacao, ct);
+        var resumo = ComInsightsVivos(await MontarResumoAsync(idEmpresa, inicio, fim, forcarAtualizacao, ct));
         await cache.DefinirAsync(chave, resumo, Ttl, ct);
         return resumo;
     }
@@ -65,7 +70,7 @@ public sealed class DashboardServico(
         => radar.ObterSnapshotAsync(idEmpresa, ct: ct);
 
     public Task<FaturamentoDto> ObterFaturamentoAsync(Guid idEmpresa, CancellationToken ct = default)
-        => modulos.ObterFaturamentoAsync(idEmpresa, ct);
+        => modulos.ObterFaturamentoAsync(idEmpresa, ct: ct);
 
     public Task<IReadOnlyList<AlertaDto>> ObterAlertasAsync(Guid idEmpresa, CancellationToken ct = default)
         => modulos.ObterAlertasAsync(idEmpresa, ct);
@@ -97,48 +102,12 @@ public sealed class DashboardServico(
         var empresa = await empresas.ObterPorIdAsync(idEmpresa, ct);
         var snapshotDb = await snapshots.ObterMaisRecenteAsync(idEmpresa, ct);
         var radarDto = await radar.ObterSnapshotAsync(idEmpresa, forcarAtualizacao, ct);
+        var fatRecente = await faturamento.ObterMaisRecenteAsync(idEmpresa, ct);
         var insightsDb = await insights.ObterAtivosAsync(idEmpresa, ct);
         var alertas = await modulos.ObterAlertasAsync(idEmpresa, ct);
         var plano = await ObterPlanoAcaoAsync(idEmpresa, ct);
-
-        // Valores do snapshot persistido têm prioridade sobre cálculo dinâmico (mock visual).
-        var lucroAtual = snapshotDb?.LucroAtual ?? radarDto.LucroAtual;
-        if (snapshotDb is not null)
-        {
-            radarDto.LucroAtual = lucroAtual;
-            radarDto.RiscoProximos30Dias = snapshotDb.LucroEmRisco;
-            radarDto.ValorOportunidade = snapshotDb.ValorOportunidade;
-            radarDto.GargalosCriticos = snapshotDb.GargalosCriticos;
-            radarDto.SaudeEmpresaPercentual = snapshotDb.SaudeEmpresaPercentual;
-        }
-
-        var previsao = new PrevisaoResultadoDto
-        {
-            Dias = diasPeriodo,
-            CenarioMaisProvavel = snapshotDb?.PrevisaoResultado30Dias ?? 5_712_000m,
-            Meta = snapshotDb?.MetaResultado30Dias ?? 6_650_000m,
-            PercentualAbaixoMeta = snapshotDb?.PercentualAbaixoMetaPrevisao ?? 14m,
-            Serie = GerarSeriePrevisao(
-                snapshotDb?.PrevisaoResultado30Dias ?? 5_712_000m,
-                snapshotDb?.MetaResultado30Dias ?? 6_650_000m,
-                inicio,
-                fim)
-        };
-
-        var fluxo = new FluxoCaixaFuturoDto
-        {
-            Dias = 60,
-            AReceber = snapshotDb?.FluxoAReceber60Dias ?? 3_842_000m,
-            EmRisco = snapshotDb?.FluxoEmRisco60Dias ?? 642_000m,
-            Atrasado = snapshotDb?.FluxoAtrasado60Dias ?? 285_000m,
-            PercentualSaudavel = snapshotDb?.PercentualFluxoSaudavel ?? 78,
-            Segmentos =
-            [
-                new SegmentoDonutDto { Rotulo = "Saudável", Valor = snapshotDb?.FluxoAReceber60Dias ?? 3_842_000m, Cor = "#22c55e" },
-                new SegmentoDonutDto { Rotulo = "Em risco", Valor = snapshotDb?.FluxoEmRisco60Dias ?? 642_000m, Cor = "#f97316" },
-                new SegmentoDonutDto { Rotulo = "Atrasado", Valor = snapshotDb?.FluxoAtrasado60Dias ?? 285_000m, Cor = "#ef4444" }
-            ]
-        };
+        var fluxo = await MontarFluxoAsync(idEmpresa, snapshotDb, ct);
+        var previsao = MontarPrevisao(diasPeriodo, inicio, fim, snapshotDb, fatRecente);
 
         return new ResumoDashboardDto
         {
@@ -171,6 +140,75 @@ public sealed class DashboardServico(
                 PlanoAcao = plano.ToList()
             }
         };
+    }
+
+    private async Task<FluxoCaixaFuturoDto> MontarFluxoAsync(
+        Guid idEmpresa,
+        SnapshotDashboard? snapshotDb,
+        CancellationToken ct)
+    {
+        var contas = await contasReceber.ObterProximos60DiasAsync(idEmpresa, ct);
+        var aReceber = contas.Where(c => c.Status == "AReceber").Sum(c => c.Valor);
+        var emRisco = contas.Where(c => c.Status == "EmRisco").Sum(c => c.Valor);
+        var atrasado = contas.Where(c => c.Status == "Atrasado").Sum(c => c.Valor);
+        var total = aReceber + emRisco + atrasado;
+
+        if (total <= 0 && snapshotDb is not null)
+        {
+            aReceber = snapshotDb.FluxoAReceber60Dias;
+            emRisco = snapshotDb.FluxoEmRisco60Dias;
+            atrasado = snapshotDb.FluxoAtrasado60Dias;
+            total = aReceber + emRisco + atrasado;
+        }
+
+        var percentual = total <= 0 ? 0 : (int)Math.Round(aReceber / total * 100m);
+
+        return new FluxoCaixaFuturoDto
+        {
+            Dias = 60,
+            AReceber = aReceber,
+            EmRisco = emRisco,
+            Atrasado = atrasado,
+            PercentualSaudavel = percentual,
+            Segmentos =
+            [
+                new SegmentoDonutDto { Rotulo = "Saudável", Valor = aReceber, Cor = "#22c55e" },
+                new SegmentoDonutDto { Rotulo = "Em risco", Valor = emRisco, Cor = "#f97316" },
+                new SegmentoDonutDto { Rotulo = "Atrasado", Valor = atrasado, Cor = "#ef4444" }
+            ]
+        };
+    }
+
+    private static PrevisaoResultadoDto MontarPrevisao(
+        int diasPeriodo,
+        DateOnly? inicio,
+        DateOnly? fim,
+        SnapshotDashboard? snapshotDb,
+        SnapshotFaturamento? fatRecente)
+    {
+        var cenario = snapshotDb?.PrevisaoResultado30Dias
+                      ?? (fatRecente is null ? 0 : fatRecente.FaturamentoDia * diasPeriodo);
+        var meta = snapshotDb?.MetaResultado30Dias
+                   ?? (fatRecente is null || fatRecente.MetaMensal <= 0
+                       ? 0
+                       : fatRecente.MetaMensal / DateTime.DaysInMonth(DateTime.UtcNow.Year, DateTime.UtcNow.Month) * diasPeriodo);
+        var abaixo = snapshotDb?.PercentualAbaixoMetaPrevisao
+                     ?? (meta <= 0 ? 0 : Math.Round((meta - cenario) / meta * 100m, 1));
+
+        return new PrevisaoResultadoDto
+        {
+            Dias = diasPeriodo,
+            CenarioMaisProvavel = cenario,
+            Meta = meta,
+            PercentualAbaixoMeta = abaixo,
+            Serie = GerarSeriePrevisao(cenario, meta, inicio, fim)
+        };
+    }
+
+    private static ResumoDashboardDto ComInsightsVivos(ResumoDashboardDto resumo)
+    {
+        resumo.Insights = GeradorInsightsPainel.Montar(resumo);
+        return resumo;
     }
 
     private static int ObterDiasPeriodo(DateOnly? inicio, DateOnly? fim)

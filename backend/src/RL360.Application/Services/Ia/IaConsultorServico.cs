@@ -57,19 +57,19 @@ public sealed class IaConsultorServico(
             try
             {
                 (resposta, modo) = await provedor.CompletarAsync(
-                    contexto.Resumo, requisicao.Pergunta, contexto.PromptSistema, ct);
+                    contexto.Resumo, requisicao.Pergunta, contexto.PromptSistema, contexto.Historico, ct);
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Falha no provedor externo; usando demo.");
-                resposta = IaRespostaDemo.Gerar(contexto.Resumo, requisicao.Pergunta, contexto.ContextoRag);
-                modo = "Demo";
+                logger.LogWarning(ex, "Falha no provedor externo; usando consultor do radar.");
+                resposta = IaConsultorLocal.Gerar(contexto.Resumo, requisicao.Pergunta, contexto.ContextoRag);
+                modo = "Consultor";
             }
         }
         else
         {
-            resposta = IaRespostaDemo.Gerar(contexto.Resumo, requisicao.Pergunta, contexto.ContextoRag);
-            modo = "Demo";
+            resposta = IaConsultorLocal.Gerar(contexto.Resumo, requisicao.Pergunta, contexto.ContextoRag);
+            modo = "Consultor";
         }
 
         await SalvarMensagemAsync(idEmpresa, idUsuario, idConversa, "assistente", resposta, modo, ct);
@@ -95,19 +95,14 @@ public sealed class IaConsultorServico(
         await SalvarMensagemAsync(idEmpresa, idUsuario, idConversa, "usuario", requisicao.Pergunta, "Usuario", ct);
 
         var sb = new System.Text.StringBuilder();
-        var modo = provedor.ProvedorExternoDisponivel
-            ? IaProvedorConfig.ObterNomeModo(configuracao.Value)
-            : "Demo";
+        var modo = IaProvedorConfig.ObterNomeModo(configuracao.Value);
 
         await foreach (var delta in provedor.CompletarStreamAsync(
-            contexto.Resumo, requisicao.Pergunta, contexto.PromptSistema, ct))
+            contexto.Resumo, requisicao.Pergunta, contexto.PromptSistema, contexto.Historico, ct))
         {
             sb.Append(delta);
             yield return new EventoStreamIaDto { Tipo = "delta", Delta = delta };
         }
-
-        if (!provedor.ProvedorExternoDisponivel)
-            modo = "Demo";
 
         var respostaFinal = sb.ToString();
         await SalvarMensagemAsync(idEmpresa, idUsuario, idConversa, "assistente", respostaFinal, modo, ct);
@@ -162,9 +157,9 @@ public sealed class IaConsultorServico(
             .Select(m => new MensagemConversaIaResumo(m.Papel, m.Conteudo))
             .ToList();
 
-        var prompt = IaPromptBuilder.MontarPromptSistema(resumo, contextoRag, historico);
+        var prompt = IaPromptBuilder.MontarPromptSistema(resumo, contextoRag);
 
-        return new ContextoIa(resumo, contextoRag, prompt);
+        return new ContextoIa(resumo, contextoRag, prompt, historico);
     }
 
     private Task SalvarMensagemAsync(
@@ -178,5 +173,9 @@ public sealed class IaConsultorServico(
         => conversas.InserirAsync(
             new MensagemConversaIa(idEmpresa, idUsuario, idConversa, papel, conteudo, modo), ct);
 
-    private sealed record ContextoIa(ResumoDashboardDto Resumo, string ContextoRag, string PromptSistema);
+    private sealed record ContextoIa(
+        ResumoDashboardDto Resumo,
+        string ContextoRag,
+        string PromptSistema,
+        IReadOnlyList<MensagemConversaIaResumo> Historico);
 }

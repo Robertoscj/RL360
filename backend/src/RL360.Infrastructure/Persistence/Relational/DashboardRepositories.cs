@@ -25,7 +25,7 @@ public sealed class SnapshotDashboardRepositorio(IFabricaConexaoBanco fabrica, I
         var limite = dialecto.SelecionarLimiteFixo(1);
         var sufixo = dialecto.SufixoLimiteFixo(1);
         return await db.QuerySingleOrDefaultAsync<SnapshotDashboard>(
-            $"SELECT {limite} {Colunas} FROM DashboardSnapshots WHERE TenantId = @idEmpresa ORDER BY CreatedAtUtc DESC{sufixo}",
+            $"SELECT {limite} {Colunas} FROM SnapshotsDashboard WHERE TenantId = @idEmpresa ORDER BY CreatedAtUtc DESC{sufixo}",
             new { idEmpresa });
     }
 
@@ -33,7 +33,7 @@ public sealed class SnapshotDashboardRepositorio(IFabricaConexaoBanco fabrica, I
     {
         using var db = fabrica.Criar();
         await db.ExecuteAsync(@"
-            INSERT INTO DashboardSnapshots (
+            INSERT INTO SnapshotsDashboard (
                 Id, TenantId, RevenueToday, RevenueMonth, CurrentProfit, ProfitAtRisk,
                 OpportunityAmount, CompanyHealthPercent, CriticalBottlenecks, DelinquencyAmount,
                 ConversionRate, MonthGoal, MonthGoalPercent, ForecastResult30Days, ForecastGoal30Days,
@@ -57,7 +57,7 @@ public sealed class PlanoAcaoRepositorio(IFabricaConexaoBanco fabrica, IDialecto
             SELECT Id, TenantId AS IdEmpresa, Title AS Titulo, Rationale AS Justificativa,
                    ExpectedImpact AS ImpactoEsperado, Priority AS Prioridade,
                    IsDone AS Executado, IsActive AS Ativo, CreatedAtUtc AS CriadoEmUtc
-            FROM ActionPlanItems WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}",
+            FROM ItensPlanoAcao WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}",
             new { idEmpresa })).ToList();
     }
 }
@@ -71,7 +71,7 @@ public sealed class InsightRepositorio(IFabricaConexaoBanco fabrica, IDialectoSq
             SELECT Id, TenantId AS IdEmpresa, Type AS Tipo, Title AS Titulo,
                    Description AS Descricao, ButtonText AS TextoBotao, ActionRoute AS RotaAcao,
                    FinancialImpact AS ImpactoFinanceiro, IsActive AS Ativo, CreatedAtUtc AS CriadoEmUtc
-            FROM SmartInsights WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}",
+            FROM InsightsInteligentes WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}",
             new { idEmpresa })).ToList();
     }
 }
@@ -85,7 +85,7 @@ public sealed class ContaReceberRepositorio(IFabricaConexaoBanco fabrica, IDiale
             SELECT Id, TenantId AS IdEmpresa, ClientId AS IdCliente, ClientName AS NomeCliente,
                    Amount AS Valor, DueAtUtc AS VencimentoEmUtc, Status, IsActive AS Ativo,
                    CreatedAtUtc AS CriadoEmUtc
-            FROM Receivables
+            FROM ContasReceber
             WHERE TenantId = @idEmpresa AND IsActive = {dialecto.LiteralVerdadeiro}
               AND DueAtUtc <= {dialecto.UtcMaisDias(60)}",
             new { idEmpresa })).ToList();

@@ -28,11 +28,12 @@ public sealed class IaProvedorChat(
         ResumoDashboardDto resumo,
         string pergunta,
         string promptSistema,
+        IReadOnlyList<MensagemConversaIaResumo>? historico,
         CancellationToken ct)
     {
         var config = configuracao.Value;
         var modo = IaProvedorConfig.ObterNomeModo(config);
-        var texto = await EnviarChatAsync(config, promptSistema, pergunta, stream: false, ct);
+        var texto = await EnviarChatAsync(config, promptSistema, pergunta, historico, stream: false, ct);
         return (texto, modo);
     }
 
@@ -40,34 +41,57 @@ public sealed class IaProvedorChat(
         ResumoDashboardDto resumo,
         string pergunta,
         string promptSistema,
+        IReadOnlyList<MensagemConversaIaResumo>? historico,
         [EnumeratorCancellation] CancellationToken ct)
     {
         var config = configuracao.Value;
 
         if (!ProvedorExternoDisponivel)
         {
-            var demo = IaRespostaDemo.Gerar(resumo, pergunta, ExtrairRagDoPrompt(promptSistema));
-            foreach (var chunk in DividirEmChunks(demo, 12))
-            {
+            await foreach (var chunk in EmitirConsultorAsync(resumo, pergunta, promptSistema, ct))
                 yield return chunk;
-                await Task.Delay(18, ct);
-            }
             yield break;
         }
 
-        await foreach (var delta in LerStreamOpenAiAsync(config, promptSistema, pergunta, ct))
-            yield return delta;
+        var emitiu = false;
+        var usarConsultor = false;
+        await using var enumerador = LerStreamOpenAiAsync(config, promptSistema, pergunta, historico, ct).GetAsyncEnumerator(ct);
+        while (!usarConsultor)
+        {
+            bool tem;
+            try
+            {
+                tem = await enumerador.MoveNextAsync();
+            }
+            catch (Exception ex) when (!emitiu)
+            {
+                logger.LogWarning(ex, "Falha no provedor externo em stream; usando consultor do radar.");
+                usarConsultor = true;
+                break;
+            }
+
+            if (!tem) break;
+            emitiu = true;
+            yield return enumerador.Current;
+        }
+
+        if (usarConsultor)
+        {
+            await foreach (var chunk in EmitirConsultorAsync(resumo, pergunta, promptSistema, ct))
+                yield return chunk;
+        }
     }
 
     private async Task<string> EnviarChatAsync(
         ConfiguracaoIa config,
         string promptSistema,
         string pergunta,
+        IReadOnlyList<MensagemConversaIaResumo>? historico,
         bool stream,
         CancellationToken ct)
     {
         var client = CriarCliente(config);
-        var payload = MontarPayload(config, promptSistema, pergunta, stream);
+        var payload = MontarPayload(config, promptSistema, pergunta, historico, stream);
         var url = IaProvedorConfig.ResolverUrlChat(config);
 
         using var response = await client.PostAsJsonAsync(url, payload, JsonOpts, ct);
@@ -87,10 +111,11 @@ public sealed class IaProvedorChat(
         ConfiguracaoIa config,
         string promptSistema,
         string pergunta,
+        IReadOnlyList<MensagemConversaIaResumo>? historico,
         [EnumeratorCancellation] CancellationToken ct)
     {
         var client = CriarCliente(config);
-        var payload = MontarPayload(config, promptSistema, pergunta, stream: true);
+        var payload = MontarPayload(config, promptSistema, pergunta, historico, stream: true);
         var url = IaProvedorConfig.ResolverUrlChat(config);
 
         using var request = new HttpRequestMessage(HttpMethod.Post, url)
@@ -137,19 +162,62 @@ public sealed class IaProvedorChat(
         return client;
     }
 
-    private static object MontarPayload(ConfiguracaoIa config, string promptSistema, string pergunta, bool stream)
-        => new
+    private static object MontarPayload(
+        ConfiguracaoIa config,
+        string promptSistema,
+        string pergunta,
+        IReadOnlyList<MensagemConversaIaResumo>? historico,
+        bool stream)
+    {
+        var mensagens = new List<object> { new { role = "system", content = promptSistema } };
+        if (historico is { Count: > 0 })
+        {
+            foreach (var h in historico.TakeLast(8))
+            {
+                var role = string.Equals(h.Papel, "usuario", StringComparison.OrdinalIgnoreCase) ? "user" : "assistant";
+                var texto = h.Conteudo.Length > 800 ? h.Conteudo[..800] + "…" : h.Conteudo;
+                mensagens.Add(new { role, content = texto });
+            }
+        }
+
+        mensagens.Add(new { role = "user", content = pergunta });
+
+        if (string.Equals(config.Provedor, "Groq", StringComparison.OrdinalIgnoreCase))
+        {
+            return new
+            {
+                model = IaProvedorConfig.ObterModelo(config),
+                temperature = 0.4,
+                max_tokens = Math.Max(config.MaxTokens, 1200),
+                stream,
+                reasoning_effort = "low",
+                messages = mensagens
+            };
+        }
+
+        return new
         {
             model = IaProvedorConfig.ObterModelo(config),
             temperature = 0.3,
             max_tokens = config.MaxTokens,
             stream,
-            messages = new object[]
-            {
-                new { role = "system", content = promptSistema },
-                new { role = "user", content = pergunta }
-            }
+            messages = mensagens
         };
+    }
+
+    private static async IAsyncEnumerable<string> EmitirConsultorAsync(
+        ResumoDashboardDto resumo,
+        string pergunta,
+        string promptSistema,
+        [EnumeratorCancellation] CancellationToken ct)
+    {
+        var texto = IaConsultorLocal.Gerar(resumo, pergunta, ExtrairRagDoPrompt(promptSistema));
+        foreach (var chunk in DividirEmChunks(texto, 16))
+        {
+            yield return chunk;
+            await Task.Delay(12, ct);
+        }
+    }
 
     private static IEnumerable<string> DividirEmChunks(string texto, int tamanho)
     {
@@ -198,14 +266,20 @@ public sealed class IaProvedorChat(
 internal static class IaProvedorConfig
 {
     public static bool UsaProvedorExterno(ConfiguracaoIa config)
-        => (string.Equals(config.Provedor, "OpenAI", StringComparison.OrdinalIgnoreCase)
-            || string.Equals(config.Provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase))
-           && !string.IsNullOrWhiteSpace(config.ApiKey);
+        => EhProvedorExterno(config.Provedor) && !string.IsNullOrWhiteSpace(ResolverApiKey(config));
+
+    public static bool EhProvedorExterno(string? provedor)
+        => string.Equals(provedor, "OpenAI", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(provedor, "Groq", StringComparison.OrdinalIgnoreCase);
 
     public static string ObterNomeModo(ConfiguracaoIa config)
-        => string.Equals(config.Provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase)
-            ? "AzureOpenAI"
-            : "OpenAI";
+    {
+        if (!UsaProvedorExterno(config)) return "Consultor";
+        if (string.Equals(config.Provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase)) return "AzureOpenAI";
+        if (string.Equals(config.Provedor, "Groq", StringComparison.OrdinalIgnoreCase)) return "Groq";
+        return "OpenAI";
+    }
 
     public static string ObterModelo(ConfiguracaoIa config)
         => string.Equals(config.Provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase)
@@ -220,7 +294,29 @@ internal static class IaProvedorConfig
             return $"{config.BaseUrl.TrimEnd('/')}/openai/deployments/{deployment}/chat/completions?api-version={config.VersaoApi}";
         }
 
-        return $"{config.BaseUrl.TrimEnd('/')}/chat/completions";
+        var baseUrl = ResolverBaseUrl(config);
+        return $"{baseUrl.TrimEnd('/')}/chat/completions";
+    }
+
+    public static string ResolverApiKey(ConfiguracaoIa config)
+    {
+        if (!string.IsNullOrWhiteSpace(config.ApiKey)) return config.ApiKey;
+        return Environment.GetEnvironmentVariable("GROQ_API_KEY")
+               ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY")
+               ?? Environment.GetEnvironmentVariable("RL360_IA_API_KEY")
+               ?? string.Empty;
+    }
+
+    public static string ResolverBaseUrl(ConfiguracaoIa config)
+    {
+        if (!string.IsNullOrWhiteSpace(config.BaseUrl)
+            && !config.BaseUrl.Contains("api.openai.com", StringComparison.OrdinalIgnoreCase))
+            return config.BaseUrl;
+
+        if (string.Equals(config.Provedor, "Groq", StringComparison.OrdinalIgnoreCase))
+            return "https://api.groq.com/openai/v1";
+
+        return string.IsNullOrWhiteSpace(config.BaseUrl) ? "https://api.openai.com/v1" : config.BaseUrl;
     }
 
     public static void ConfigurarAutenticacao(HttpClient client, ConfiguracaoIa config)
@@ -228,9 +324,10 @@ internal static class IaProvedorConfig
         client.DefaultRequestHeaders.Authorization = null;
         client.DefaultRequestHeaders.Remove("api-key");
 
+        var chave = ResolverApiKey(config);
         if (string.Equals(config.Provedor, "AzureOpenAI", StringComparison.OrdinalIgnoreCase))
-            client.DefaultRequestHeaders.Add("api-key", config.ApiKey);
+            client.DefaultRequestHeaders.Add("api-key", chave);
         else
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.ApiKey);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chave);
     }
 }

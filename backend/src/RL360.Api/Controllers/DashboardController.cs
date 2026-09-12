@@ -11,11 +11,11 @@ public sealed class DashboardController(
 {
     [HttpGet("faturamento")]
     public async Task<IActionResult> Faturamento(CancellationToken ct)
-        => Ok(await modulos.ObterFaturamentoAsync(ExigirIdEmpresa(), ct));
+        => Ok(await modulos.ObterFaturamentoAsync(ExigirIdEmpresa(), ct: ct));
 
     [HttpGet("vendas")]
     public async Task<IActionResult> Vendas(CancellationToken ct)
-        => Ok(await modulos.ObterVendasAsync(ExigirIdEmpresa(), ct));
+        => Ok(await modulos.ObterVendasAsync(ExigirIdEmpresa(), ct: ct));
 
     [HttpGet("funil")]
     public async Task<IActionResult> Funil(CancellationToken ct)

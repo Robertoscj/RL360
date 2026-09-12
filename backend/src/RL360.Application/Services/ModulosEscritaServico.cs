@@ -35,7 +35,7 @@ public sealed class ModulosEscritaServico(
             req.CustoMes, req.CustoFixoMes), ct);
 
         await processador.ProcessarEmpresaAsync(idEmpresa, ct);
-        return await modulosLeitura.ObterFaturamentoAsync(idEmpresa, ct);
+        return await modulosLeitura.ObterFaturamentoAsync(idEmpresa, ct: ct);
     }
 
     public async Task<VendaDto> RegistrarVendaAsync(

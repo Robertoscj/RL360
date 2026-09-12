@@ -1,8 +1,8 @@
 -- RL360 — Script 001: Criação de tabelas
 -- Executar em ordem: 001 → 002 → 003
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Tenants')
-CREATE TABLE Tenants (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Empresas')
+CREATE TABLE Empresas (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     Name            NVARCHAR(200)    NOT NULL,
     Document        NVARCHAR(20)     NOT NULL,
@@ -13,8 +13,8 @@ CREATE TABLE Tenants (
     UpdatedAtUtc    DATETIME2        NULL
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Users')
-CREATE TABLE Users (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Usuarios')
+CREATE TABLE Usuarios (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Name            NVARCHAR(200)    NOT NULL,
@@ -24,11 +24,11 @@ CREATE TABLE Users (
     IsActive        BIT              NOT NULL DEFAULT 1,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Users_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Users_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'RevenueSnapshots')
-CREATE TABLE RevenueSnapshots (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'SnapshotsFaturamento')
+CREATE TABLE SnapshotsFaturamento (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     ReferenceDate   DATE             NOT NULL,
@@ -39,11 +39,11 @@ CREATE TABLE RevenueSnapshots (
     FixedCostMonth  DECIMAL(18,2)    NOT NULL DEFAULT 0,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_RevenueSnapshots_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_RevenueSnapshots_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Sales')
-CREATE TABLE Sales (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Vendas')
+CREATE TABLE Vendas (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     ClientId        UNIQUEIDENTIFIER NULL,
@@ -54,11 +54,11 @@ CREATE TABLE Sales (
     IsNewClient     BIT              NOT NULL DEFAULT 0,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Sales_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Sales_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'FunnelStages')
-CREATE TABLE FunnelStages (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'EtapasFunil')
+CREATE TABLE EtapasFunil (
     Id                      UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId                UNIQUEIDENTIFIER NOT NULL,
     Name                    NVARCHAR(100)    NOT NULL,
@@ -69,11 +69,11 @@ CREATE TABLE FunnelStages (
     BaselineConversionRate  DECIMAL(8,4)     NOT NULL,
     CreatedAtUtc            DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc            DATETIME2        NULL,
-    CONSTRAINT FK_FunnelStages_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_FunnelStages_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Clients')
-CREATE TABLE Clients (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Clientes')
+CREATE TABLE Clientes (
     Id                  UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId            UNIQUEIDENTIFIER NOT NULL,
     Name                NVARCHAR(200)    NOT NULL,
@@ -85,11 +85,11 @@ CREATE TABLE Clients (
     HealthScore         INT              NOT NULL DEFAULT 100,
     CreatedAtUtc        DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc        DATETIME2        NULL,
-    CONSTRAINT FK_Clients_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Clients_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'DelinquencyRecords')
-CREATE TABLE DelinquencyRecords (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'RegistrosInadimplencia')
+CREATE TABLE RegistrosInadimplencia (
     Id                      UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId                UNIQUEIDENTIFIER NOT NULL,
     ClientId                UNIQUEIDENTIFIER NULL,
@@ -99,11 +99,11 @@ CREATE TABLE DelinquencyRecords (
     RecoveryProbability     DECIMAL(8,4)     NOT NULL,
     CreatedAtUtc            DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc            DATETIME2        NULL,
-    CONSTRAINT FK_DelinquencyRecords_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_DelinquencyRecords_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Bottlenecks')
-CREATE TABLE Bottlenecks (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Gargalos')
+CREATE TABLE Gargalos (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Title           NVARCHAR(300)    NOT NULL,
@@ -113,11 +113,11 @@ CREATE TABLE Bottlenecks (
     IsCritical      BIT              NOT NULL DEFAULT 0,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Bottlenecks_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Bottlenecks_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'TeamMembers')
-CREATE TABLE TeamMembers (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'MembrosEquipe')
+CREATE TABLE MembrosEquipe (
     Id                  UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId            UNIQUEIDENTIFIER NOT NULL,
     Name                NVARCHAR(200)    NOT NULL,
@@ -127,11 +127,11 @@ CREATE TABLE TeamMembers (
     ProductivityScore   INT              NOT NULL,
     CreatedAtUtc        DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc        DATETIME2        NULL,
-    CONSTRAINT FK_TeamMembers_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_TeamMembers_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Goals')
-CREATE TABLE Goals (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Metas')
+CREATE TABLE Metas (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Name            NVARCHAR(200)    NOT NULL,
@@ -141,11 +141,11 @@ CREATE TABLE Goals (
     PeriodEnd       DATETIME2        NOT NULL,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Goals_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Goals_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Alerts')
-CREATE TABLE Alerts (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Alertas')
+CREATE TABLE Alertas (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Title           NVARCHAR(300)    NOT NULL,
@@ -156,11 +156,11 @@ CREATE TABLE Alerts (
     IsResolved      BIT              NOT NULL DEFAULT 0,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Alerts_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Alerts_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'DashboardSnapshots')
-CREATE TABLE DashboardSnapshots (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'SnapshotsDashboard')
+CREATE TABLE SnapshotsDashboard (
     Id                          UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId                    UNIQUEIDENTIFIER NOT NULL,
     RevenueToday                DECIMAL(18,2)    NOT NULL,
@@ -184,11 +184,11 @@ CREATE TABLE DashboardSnapshots (
     PayloadJson                 NVARCHAR(MAX)    NOT NULL DEFAULT '{}',
     CreatedAtUtc                DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc                DATETIME2        NULL,
-    CONSTRAINT FK_DashboardSnapshots_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_DashboardSnapshots_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'Receivables')
-CREATE TABLE Receivables (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'ContasReceber')
+CREATE TABLE ContasReceber (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     ClientId        UNIQUEIDENTIFIER NULL,
@@ -199,11 +199,11 @@ CREATE TABLE Receivables (
     IsActive        BIT              NOT NULL DEFAULT 1,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_Receivables_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_Receivables_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'ActionPlanItems')
-CREATE TABLE ActionPlanItems (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'ItensPlanoAcao')
+CREATE TABLE ItensPlanoAcao (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Title           NVARCHAR(300)    NOT NULL,
@@ -214,11 +214,11 @@ CREATE TABLE ActionPlanItems (
     IsActive        BIT              NOT NULL DEFAULT 1,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_ActionPlanItems_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_ActionPlanItems_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
 
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'SmartInsights')
-CREATE TABLE SmartInsights (
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'InsightsInteligentes')
+CREATE TABLE InsightsInteligentes (
     Id              UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(),
     TenantId        UNIQUEIDENTIFIER NOT NULL,
     Type            NVARCHAR(50)     NOT NULL,
@@ -230,7 +230,16 @@ CREATE TABLE SmartInsights (
     IsActive        BIT              NOT NULL DEFAULT 1,
     CreatedAtUtc    DATETIME2        NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAtUtc    DATETIME2        NULL,
-    CONSTRAINT FK_SmartInsights_Tenants FOREIGN KEY (TenantId) REFERENCES Tenants(Id)
+    CONSTRAINT FK_SmartInsights_Tenants FOREIGN KEY (TenantId) REFERENCES Empresas(Id)
 );
+
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Sales_Clients')
+ALTER TABLE Vendas ADD CONSTRAINT FK_Sales_Clients FOREIGN KEY (ClientId) REFERENCES Clientes(Id);
+
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_DelinquencyRecords_Clients')
+ALTER TABLE RegistrosInadimplencia ADD CONSTRAINT FK_DelinquencyRecords_Clients FOREIGN KEY (ClientId) REFERENCES Clientes(Id);
+
+IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Receivables_Clients')
+ALTER TABLE ContasReceber ADD CONSTRAINT FK_Receivables_Clients FOREIGN KEY (ClientId) REFERENCES Clientes(Id);
 
 GO

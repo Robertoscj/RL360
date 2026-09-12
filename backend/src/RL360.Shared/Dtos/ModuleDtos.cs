@@ -8,6 +8,8 @@ public sealed class FaturamentoDto
     public decimal PercentualMetaAtingida { get; set; }
     public decimal CustoMes { get; set; }
     public decimal Lucro { get; set; }
+    public int QuantidadeOperacoes { get; set; }
+    public decimal TicketMedio { get; set; }
     public List<PontoSerieTemporalDto> SerieDiaria { get; set; } = [];
 }
 

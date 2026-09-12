@@ -22,12 +22,14 @@ public interface IFaturamentoRepositorio
 {
     Task<SnapshotFaturamento?> ObterMaisRecenteAsync(Guid idEmpresa, CancellationToken ct = default);
     Task<IReadOnlyList<SnapshotFaturamento>> ObterSerieDiariaAsync(Guid idEmpresa, int dias, CancellationToken ct = default);
+    Task<IReadOnlyList<SnapshotFaturamento>> ObterPorPeriodoAsync(Guid idEmpresa, DateOnly inicio, DateOnly fim, CancellationToken ct = default);
     Task<SnapshotFaturamento> InserirAsync(SnapshotFaturamento snapshot, CancellationToken ct = default);
 }
 
 public interface IVendaRepositorio
 {
     Task<IReadOnlyList<Venda>> ObterMesAtualAsync(Guid idEmpresa, CancellationToken ct = default);
+    Task<IReadOnlyList<Venda>> ObterPorPeriodoAsync(Guid idEmpresa, DateOnly inicio, DateOnly fim, CancellationToken ct = default);
     Task<Venda> InserirAsync(Venda venda, CancellationToken ct = default);
 }
 

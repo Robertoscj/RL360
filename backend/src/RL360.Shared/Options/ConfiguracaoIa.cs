@@ -2,8 +2,8 @@ namespace RL360.Shared.Options;
 
 public sealed class ConfiguracaoIa
 {
-    /// <summary>Demo | OpenAI | AzureOpenAI</summary>
-    public string Provedor { get; set; } = "Demo";
+    /// <summary>Consultor | Groq | OpenAI | AzureOpenAI</summary>
+    public string Provedor { get; set; } = "Consultor";
     public string ApiKey { get; set; } = string.Empty;
     public string Modelo { get; set; } = "gpt-4o-mini";
     public string BaseUrl { get; set; } = "https://api.openai.com/v1";

@@ -9,3 +9,15 @@
 /Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/obj/Debug/net10.0/refint/RL360.Domain.dll
 /Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/obj/Debug/net10.0/RL360.Domain.pdb
 /Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/obj/Debug/net10.0/ref/RL360.Domain.dll
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\bin\Debug\net10.0\RL360.Domain.deps.json
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\bin\Debug\net10.0\RL360.Domain.dll
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\bin\Debug\net10.0\RL360.Domain.pdb
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.AssemblyInfoInputs.cache
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.AssemblyInfo.cs
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.csproj.CoreCompileInputs.cache
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.sourcelink.json
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.dll
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\refint\RL360.Domain.dll
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\RL360.Domain.pdb
+C:\Users\HOME\Desktop\RL360\backend\src\RL360.Domain\obj\Debug\net10.0\ref\RL360.Domain.dll

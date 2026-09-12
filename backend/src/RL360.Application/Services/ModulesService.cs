@@ -6,8 +6,16 @@ namespace RL360.Application.Services;
 
 public interface IModulosServico
 {
-    Task<FaturamentoDto> ObterFaturamentoAsync(Guid idEmpresa, CancellationToken ct = default);
-    Task<IReadOnlyList<VendaDto>> ObterVendasAsync(Guid idEmpresa, CancellationToken ct = default);
+    Task<FaturamentoDto> ObterFaturamentoAsync(
+        Guid idEmpresa,
+        DateOnly? inicio = null,
+        DateOnly? fim = null,
+        CancellationToken ct = default);
+    Task<IReadOnlyList<VendaDto>> ObterVendasAsync(
+        Guid idEmpresa,
+        DateOnly? inicio = null,
+        DateOnly? fim = null,
+        CancellationToken ct = default);
     Task<IReadOnlyList<EtapaFunilDto>> ObterFunilAsync(Guid idEmpresa, CancellationToken ct = default);
     Task<IReadOnlyList<InadimplenciaDto>> ObterInadimplenciaAsync(Guid idEmpresa, CancellationToken ct = default);
     Task<IReadOnlyList<GargaloDto>> ObterGargalosAsync(Guid idEmpresa, CancellationToken ct = default);
@@ -29,23 +37,42 @@ public sealed class ModulosServico(
     IAlertaRepositorio alertas,
     IMapper mapper) : IModulosServico
 {
-    public async Task<FaturamentoDto> ObterFaturamentoAsync(Guid idEmpresa, CancellationToken ct = default)
+    public async Task<FaturamentoDto> ObterFaturamentoAsync(
+        Guid idEmpresa,
+        DateOnly? inicio = null,
+        DateOnly? fim = null,
+        CancellationToken ct = default)
     {
         var recente = await faturamento.ObterMaisRecenteAsync(idEmpresa, ct);
-        var serie = await faturamento.ObterSerieDiariaAsync(idEmpresa, 30, ct);
+        var serie = inicio is not null && fim is not null
+            ? await faturamento.ObterPorPeriodoAsync(idEmpresa, inicio.Value, fim.Value, ct)
+            : await faturamento.ObterSerieDiariaAsync(idEmpresa, 30, ct);
+        var vendasPeriodo = inicio is not null && fim is not null
+            ? await vendas.ObterPorPeriodoAsync(idEmpresa, inicio.Value, fim.Value, ct)
+            : await vendas.ObterMesAtualAsync(idEmpresa, ct);
 
-        var fatMes = recente?.FaturamentoMes ?? 0;
-        var meta = recente?.MetaMensal ?? 0;
-        var custo = recente?.CustoMes ?? 0;
+        var fatMes = serie.Count > 0 ? serie.Sum(s => s.FaturamentoDia) : recente?.FaturamentoMes ?? 0;
+        var meta = recente?.MetaMensal ?? serie.LastOrDefault()?.MetaMensal ?? 0;
+        var custoCheio = recente?.CustoMes ?? 0;
+        var diasSerie = Math.Max(1, serie.Count);
+        var diasMes = DateTime.DaysInMonth(DateTime.UtcNow.Year, DateTime.UtcNow.Month);
+        var custo = inicio is not null && fim is not null
+            ? Math.Round(custoCheio * diasSerie / diasMes, 2)
+            : custoCheio;
+        var ultimo = serie.LastOrDefault() ?? recente;
+        var qtd = vendasPeriodo.Count;
+        var ticket = qtd <= 0 ? 0 : Math.Round(vendasPeriodo.Sum(v => v.Valor) / qtd, 2);
 
         return new FaturamentoDto
         {
-            FaturamentoDia = recente?.FaturamentoDia ?? 0,
+            FaturamentoDia = ultimo?.FaturamentoDia ?? 0,
             FaturamentoMes = fatMes,
             MetaMensal = meta,
             PercentualMetaAtingida = meta <= 0 ? 0 : Math.Round(fatMes / meta * 100m, 1),
             CustoMes = custo,
             Lucro = fatMes - custo,
+            QuantidadeOperacoes = qtd,
+            TicketMedio = ticket,
             SerieDiaria = serie
                 .OrderBy(s => s.DataReferencia)
                 .Select(s => new PontoSerieTemporalDto
@@ -58,8 +85,17 @@ public sealed class ModulosServico(
         };
     }
 
-    public async Task<IReadOnlyList<VendaDto>> ObterVendasAsync(Guid idEmpresa, CancellationToken ct = default)
-        => mapper.Map<List<VendaDto>>(await vendas.ObterMesAtualAsync(idEmpresa, ct));
+    public async Task<IReadOnlyList<VendaDto>> ObterVendasAsync(
+        Guid idEmpresa,
+        DateOnly? inicio = null,
+        DateOnly? fim = null,
+        CancellationToken ct = default)
+    {
+        var lista = inicio is not null && fim is not null
+            ? await vendas.ObterPorPeriodoAsync(idEmpresa, inicio.Value, fim.Value, ct)
+            : await vendas.ObterMesAtualAsync(idEmpresa, ct);
+        return mapper.Map<List<VendaDto>>(lista);
+    }
 
     public async Task<IReadOnlyList<EtapaFunilDto>> ObterFunilAsync(Guid idEmpresa, CancellationToken ct = default)
         => mapper.Map<List<EtapaFunilDto>>(await funil.ObterEtapasAsync(idEmpresa, ct));

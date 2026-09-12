@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "AutoMapper/13.0.1": {
@@ -1790,41 +1790,43 @@
     ]
   },
   "packageFolders": {
-    "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget": {}
+    "C:\\Users\\HOME\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj",
+      "projectUniqueName": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj",
       "projectName": "RL360.Api",
-      "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/RL360.Api.csproj",
-      "packagesPath": "/var/folders/g4/r_p4swys60s4yy1xvdpl7zrh0000gn/T/cursor-sandbox-cache/46353b988c4ef0110d1da272b54fca38/nuget",
-      "outputPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Api/obj/",
+      "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\RL360.Api.csproj",
+      "packagesPath": "C:\\Users\\HOME\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/robertosilva/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\HOME\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj": {
-              "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/RL360.Application.csproj"
+            "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj": {
+              "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Application\\RL360.Application.csproj"
             },
-            "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj": {
-              "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Domain/RL360.Domain.csproj"
+            "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj": {
+              "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Domain\\RL360.Domain.csproj"
             },
-            "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj": {
-              "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Infrastructure/RL360.Infrastructure.csproj"
+            "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Infrastructure\\RL360.Infrastructure.csproj"
             },
-            "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj": {
-              "projectPath": "/Users/robertosilva/Desktop/RL360/backend/src/RL360.Shared/RL360.Shared.csproj"
+            "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj": {
+              "projectPath": "C:\\Users\\HOME\\Desktop\\RL360\\backend\\src\\RL360.Shared\\RL360.Shared.csproj"
             }
           }
         }
@@ -1839,10 +1841,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
@@ -1873,7 +1876,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
