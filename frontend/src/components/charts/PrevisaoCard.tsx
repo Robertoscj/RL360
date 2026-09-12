@@ -13,7 +13,7 @@ import {
 import { MoedaAnimada } from '@/components/ui/ValorAnimado'
 import { useTheme } from '@/hooks/useTheme'
 import { formatarMoeda } from '@/utils/format'
-import { corGridGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
+import { corGridGrafico, corTickGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
 import type { PrevisaoResultado } from '@/types/dashboard'
 
 interface PrevisaoCardProps {
@@ -24,6 +24,7 @@ export function PrevisaoCard({ previsao }: PrevisaoCardProps) {
   const { tema } = useTheme()
   const tooltipStyle = estilosTooltipGrafico(tema)
   const gridColor = corGridGrafico(tema)
+  const tickColor = corTickGrafico(tema)
   const dados = previsao.serie.slice(-12)
   const abaixoMeta = previsao.percentualAbaixoMeta > 0
   const corValor = abaixoMeta ? 'text-red-400' : 'text-emerald-400'
@@ -34,8 +35,8 @@ export function PrevisaoCard({ previsao }: PrevisaoCardProps) {
 
   return (
     <div className="glass-card flex h-full min-h-[460px] flex-col p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Previsão de Resultado</p>
-      <p className="text-[11px] text-slate-600">Próximos {previsao.dias} dias</p>
+      <p className="section-label">Previsão de Resultado</p>
+      <p className="section-desc">Próximos {previsao.dias} dias</p>
 
       <p className={`mt-4 text-[22px] font-black ${corValor}`}>
         <MoedaAnimada valor={previsao.cenarioMaisProvavel} />
@@ -52,7 +53,7 @@ export function PrevisaoCard({ previsao }: PrevisaoCardProps) {
             <CartesianGrid stroke={gridColor} strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="rotulo"
-              tick={{ fill: '#475569', fontSize: 8 }}
+              tick={{ fill: tickColor, fontSize: 8 }}
               axisLine={false}
               tickLine={false}
               interval="preserveStartEnd"
@@ -73,7 +74,7 @@ export function PrevisaoCard({ previsao }: PrevisaoCardProps) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={comparativo} layout="vertical" margin={{ left: 0, right: 8 }}>
               <XAxis type="number" hide />
-              <YAxis type="category" dataKey="nome" tick={{ fill: '#64748b', fontSize: 9 }} width={52} axisLine={false} tickLine={false} />
+              <YAxis type="category" dataKey="nome" tick={{ fill: tickColor, fontSize: 9 }} width={52} axisLine={false} tickLine={false} />
               <Bar dataKey="valor" radius={[0, 4, 4, 0]} barSize={10}>
                 {comparativo.map((entry) => (
                   <Cell key={entry.nome} fill={entry.cor} />

@@ -130,7 +130,10 @@ export function RadarLucroHexagonal({
     <div className="glass-card relative flex min-h-[460px] flex-col overflow-hidden p-3">
       <p className="section-label mb-1 px-1">Radar de Lucro</p>
 
-      <div className="relative mx-auto w-full flex-1" style={{ maxWidth: W, height: H }}>
+      <div
+        className="@container relative mx-auto w-full flex-1"
+        style={{ maxWidth: W, aspectRatio: `${W} / ${H}` }}
+      >
         <svg
           width="100%"
           height="100%"
@@ -264,20 +267,29 @@ export function RadarLucroHexagonal({
           })}
         </svg>
 
-        <div
-          className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center"
-          style={{ width: 130, marginTop: -2 }}
-        >
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Lucro Atual</p>
-          <p
-            className="mt-1 text-[21px] font-black leading-none text-rl-heading transition-all duration-500"
-            style={{ textShadow: '0 0 24px rgba(34,197,94,0.35)' }}
-          >
-            <MoedaAnimada valor={lucroAtual} reiniciarChave={versaoAnimacao} />
-          </p>
-          <p className={`mt-1.5 text-[10px] font-semibold ${variacaoPositiva ? 'text-emerald-400' : 'text-red-400'}`}>
-            {variacaoTexto}
-          </p>
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+          <div className="flex w-[22%] min-w-[92px] max-w-[132px] -translate-y-px flex-col items-center justify-center text-center">
+            <p className="w-full text-center text-[clamp(7px,2.2cqi,9px)] font-bold uppercase tracking-[0.12em] text-slate-500">
+              Lucro Atual
+            </p>
+            <p
+              className="mt-1 w-full text-center text-[clamp(13px,4.4cqi,21px)] font-black leading-none text-rl-heading transition-all duration-500"
+              style={{ textShadow: '0 0 24px rgba(34,197,94,0.35)' }}
+            >
+              <MoedaAnimada
+                valor={lucroAtual}
+                reiniciarChave={versaoAnimacao}
+                className="block w-full text-center"
+              />
+            </p>
+            <p
+              className={`mt-1.5 w-full text-center text-[clamp(8px,2.1cqi,10px)] font-semibold leading-tight ${
+                variacaoPositiva ? 'text-emerald-400' : 'text-red-400'
+              }`}
+            >
+              {variacaoTexto}
+            </p>
+          </div>
         </div>
 
         {nos.map(({ angulo, dados, rotulo, Icone }) => {

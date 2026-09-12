@@ -29,33 +29,38 @@ function corBorda(alerta: AlertaCritico) {
 }
 
 export function AlertasCriticosRow({ alertas }: AlertasCriticosRowProps) {
+  const idPiorAlerta = [...alertas]
+    .filter((alerta) => alerta.impactoFinanceiro < 0)
+    .sort((a, b) => a.impactoFinanceiro - b.impactoFinanceiro)[0]?.id
+
   return (
     <div>
-      <p className="mb-3 text-[10px] font-bold uppercase tracking-wide text-slate-500">
-        Alertas Críticos <span className="text-slate-600">({alertas.length})</span>
+      <p className="section-label mb-3">
+        Alertas Críticos <span className="font-semibold text-rl-body">({alertas.length})</span>
       </p>
       <div className="hide-scrollbar flex gap-3 overflow-x-auto pb-1">
         {alertas.map((alerta, i) => {
           const Icone = icones[i % icones.length]
+          const emPiora = alerta.id === idPiorAlerta
           return (
             <div
               key={alerta.id}
               className={`glass-card min-w-[200px] flex-shrink-0 border-t-[3px] p-3.5 ${corBorda(alerta)}`}
             >
               <div className="flex items-start gap-2.5">
-                <div className={`mt-0.5 rounded-md p-1.5 ${corImpacto(alerta.impactoFinanceiro)} bg-rl-surface`}>
+                <div className={`mt-0.5 rounded-md p-1.5 ${corImpacto(alerta.impactoFinanceiro)} bg-rl-surface ${emPiora ? 'rl-icone-alerta' : ''}`}>
                   <Icone className="h-3.5 w-3.5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[11px] font-bold leading-tight text-slate-200">{alerta.titulo}</p>
-                  <p className="mt-1 text-[10px] leading-snug text-slate-500">
+                  <p className="text-[13px] font-bold leading-tight text-rl-heading">{alerta.titulo}</p>
+                  <p className="mt-1 text-xs font-medium leading-snug text-rl-body">
                     {descricoes[alerta.titulo] ?? alerta.severidade}
                   </p>
                   <p className={`mt-2 text-sm font-black ${corImpacto(alerta.impactoFinanceiro)}`}>
                     Impacto: {alerta.impactoFinanceiro >= 0 ? '+' : ''}
                     {formatarMoeda(alerta.impactoFinanceiro)}
                   </p>
-                  <p className="mt-1 text-[9px] text-slate-600">há {1 + i * 2}h</p>
+                  <p className="mt-1 text-[11px] font-medium text-rl-body">há {1 + i * 2}h</p>
                 </div>
               </div>
             </div>

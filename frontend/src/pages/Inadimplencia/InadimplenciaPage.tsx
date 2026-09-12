@@ -104,7 +104,7 @@ export function InadimplenciaPage() {
             <Radio className="h-3 w-3 animate-pulse" />
             Monitoramento ativo
           </span>
-          <span className="text-[10px] text-slate-600">Atualização automática a cada 60s</span>
+          <span className="text-xs font-medium text-rl-body">Atualização automática a cada 60s</span>
         </div>
 
         <CardsKpiInadimplencia resumo={resumo} riscoProximos30Dias={riscoProximos30Dias} />

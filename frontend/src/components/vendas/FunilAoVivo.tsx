@@ -36,8 +36,8 @@ export function FunilAoVivo({ etapas, fechados }: Props) {
     <div className="glass-card p-4">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Funil ao vivo</p>
-          <p className="text-[11px] text-slate-600">Pipeline comercial em tempo real</p>
+          <p className="section-label">Funil ao vivo</p>
+          <p className="section-desc">Pipeline comercial em tempo real</p>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-400">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
@@ -58,8 +58,8 @@ export function FunilAoVivo({ etapas, fechados }: Props) {
             <div key={etapa.nome}>
               <div className="mb-1.5 flex flex-wrap items-end justify-between gap-2">
                 <div>
-                  <p className="text-[12px] font-bold text-slate-200">{etapa.nome}</p>
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-[13px] font-bold text-rl-heading">{etapa.nome}</p>
+                  <p className="text-xs font-medium text-rl-body">
                     {etapa.quantidade.toLocaleString('pt-BR')} ops · {formatarMoeda(etapa.valorPotencial)}
                   </p>
                 </div>
@@ -68,7 +68,7 @@ export function FunilAoVivo({ etapas, fechados }: Props) {
                     {formatarPercentual(taxa, 1)}
                   </p>
                   {base > 0 && (
-                    <p className={`text-[9px] font-semibold ${queda > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                    <p className={`text-[11px] font-semibold ${queda > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
                       {queda > 0 ? `▼ ${queda.toFixed(1)}pp` : `▲ ${Math.abs(queda).toFixed(1)}pp`} vs meta
                     </p>
                   )}
@@ -85,7 +85,7 @@ export function FunilAoVivo({ etapas, fechados }: Props) {
                     boxShadow: `0 0 20px ${cor}22`,
                   }}
                 >
-                  <span className="pl-3 text-[10px] font-bold text-white/90">
+                  <span className="pl-3 text-[10px] font-bold text-rl-heading">
                     {((etapa.quantidade / maxQtd) * 100).toFixed(0)}%
                   </span>
                 </div>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Send, Sparkles, Trash2 } from 'lucide-react'
+import { Loader2, Radar, Send, Sparkles, Trash2 } from 'lucide-react'
 import { usePeriodo } from '@/hooks/usePeriodo'
 import {
   limparHistoricoIa,
@@ -20,17 +20,17 @@ const estilos: Record<string, { borda: string; fundo: string; rotulo: string }> 
   AcaoUrgente: {
     borda: 'border-l-red-500',
     fundo: 'bg-red-500/[0.07]',
-    rotulo: 'text-red-400',
+    rotulo: 'ia-rotulo-urgente text-red-400',
   },
   Gargalo: {
     borda: 'border-l-amber-500',
     fundo: 'bg-amber-500/[0.07]',
-    rotulo: 'text-amber-400',
+    rotulo: 'ia-rotulo-gargalo text-amber-400',
   },
   Oportunidade: {
     borda: 'border-l-emerald-500',
     fundo: 'bg-emerald-500/[0.07]',
-    rotulo: 'text-emerald-400',
+    rotulo: 'ia-rotulo-oportunidade text-emerald-400',
   },
 }
 
@@ -55,7 +55,7 @@ function TextoComNegrito({ texto }: { texto: string }) {
   const partes = texto.split(/(\*\*[^*]+\*\*)/g)
   return partes.map((parte, i) =>
     parte.startsWith('**') && parte.endsWith('**') ? (
-      <strong key={i} className="font-semibold text-slate-100">
+      <strong key={i} className="font-semibold text-rl-heading">
         {parte.slice(2, -2)}
       </strong>
     ) : (
@@ -64,21 +64,12 @@ function TextoComNegrito({ texto }: { texto: string }) {
   )
 }
 
-function rotuloModo(modo?: string) {
-  if (modo === 'AzureOpenAI') return 'Azure GPT'
-  if (modo === 'OpenAI') return 'GPT'
-  if (modo === 'Groq') return 'Groq'
-  if (modo === 'Consultor' || modo === 'Demo') return 'Consultor'
-  return modo ?? ''
-}
-
 export function InsightsPanel({ insights }: InsightsPanelProps) {
   const navigate = useNavigate()
   const { periodo } = usePeriodo()
   const [pergunta, setPergunta] = useState('')
   const [mensagens, setMensagens] = useState<MensagemIa[]>([])
   const [idConversa, setIdConversa] = useState<string | null>(obterIdConversaSalvo)
-  const [modoAtual, setModoAtual] = useState<string | null>(null)
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState('')
   const chatRef = useRef<HTMLDivElement>(null)
@@ -107,8 +98,6 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
             criadoEmUtc: m.criadoEmUtc,
           })),
         )
-        const ultimoModo = historico.mensagens.findLast((m) => m.modo && m.modo !== 'Usuario')?.modo
-        if (ultimoModo) setModoAtual(ultimoModo)
         scrollChat()
       } catch {
         /* histórico opcional */
@@ -149,7 +138,6 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
           },
           onDone: ({ modo, idConversa: novoIdConversa }) => {
             setIdConversa(novoIdConversa)
-            setModoAtual(modo)
             setMensagens((prev) =>
               prev.map((m) => (m.id === msgAssistenteId ? { ...m, modo, idConversa: novoIdConversa } : m)),
             )
@@ -173,7 +161,6 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
       await limparHistoricoIa()
       setMensagens([])
       setIdConversa(null)
-      setModoAtual(null)
       setErro('')
     } catch (err) {
       setErro(err instanceof Error ? err.message : 'Erro ao limpar histórico')
@@ -191,7 +178,7 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
     <div className="glass-card flex h-[460px] max-h-[460px] flex-col overflow-hidden p-4">
       <div className="mb-3 flex shrink-0 items-center gap-2 border-b border-rl-border pb-3">
         <Sparkles className="h-4 w-4 text-emerald-400" />
-        <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400">Insights Inteligentes</p>
+        <p className="section-label">Insights Inteligentes</p>
       </div>
 
       <div className="min-h-0 flex-1 space-y-2 overflow-y-auto">
@@ -205,10 +192,10 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
               <p className={`text-[9px] font-bold uppercase tracking-wide ${e.rotulo}`}>
                 {tituloTipo(insight.tipo)}
               </p>
-              <p className="mt-1 text-[11px] font-semibold leading-snug text-slate-200">
+              <p className="mt-1 text-[11px] font-semibold leading-snug text-rl-heading">
                 {insight.titulo}
               </p>
-              <p className="mt-1 text-[10px] leading-relaxed text-slate-500">{insight.descricao}</p>
+              <p className="mt-1 text-xs font-medium leading-relaxed text-rl-body">{insight.descricao}</p>
               <button
                 type="button"
                 onClick={() => insight.rotaAcao && navigate(insight.rotaAcao)}
@@ -223,18 +210,22 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
 
       <div className="mt-3 flex shrink-0 flex-col border-t border-rl-border pt-3">
         <div className="mb-2 flex items-center justify-between">
-          <p className="text-[10px] font-semibold text-slate-500">Conversa com a IA</p>
+          <p className="text-[10px] font-semibold text-rl-body">Conversa com a IA</p>
           <div className="flex items-center gap-2">
-            {modoAtual && (
-              <span className="rounded bg-rl-surface px-1.5 py-0.5 text-[9px] text-slate-500">
-                {rotuloModo(modoAtual)}
-              </span>
-            )}
+            <span
+              className={`inline-flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 ${
+                carregando ? 'ia-radar-falando' : ''
+              }`}
+              title={carregando ? 'Respondendo...' : 'Radar'}
+              aria-label={carregando ? 'IA respondendo' : 'Radar'}
+            >
+              <Radar className="h-3.5 w-3.5" strokeWidth={2.2} />
+            </span>
             {mensagens.length > 0 && (
               <button
                 type="button"
                 onClick={() => void limparChat()}
-                className="rounded p-1 text-slate-600 hover:bg-rl-surface hover:text-red-400"
+                className="rounded p-1 text-rl-muted hover:bg-rl-surface hover:text-red-500"
                 title="Limpar histórico"
               >
                 <Trash2 className="h-3 w-3" />
@@ -243,9 +234,9 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
           </div>
         </div>
 
-        <div ref={chatRef} className="mb-2 h-[120px] space-y-2 overflow-y-auto overflow-x-hidden rounded-lg bg-rl-surface/60 p-2">
+        <div ref={chatRef} className="ia-chat-area mb-2 h-[120px] space-y-2 overflow-y-auto overflow-x-hidden rounded-lg p-2">
           {visiveis.length === 0 && (
-            <p className="px-1 py-4 text-center text-[10px] text-slate-600">
+            <p className="px-1 py-4 text-center text-[10px] text-rl-muted">
               Pergunte sobre lucro, inadimplência ou conversão.
             </p>
           )}
@@ -254,11 +245,7 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
             .map((msg) => (
             <div
               key={msg.id}
-              className={`break-words rounded-lg px-2.5 py-2 text-[11px] leading-relaxed ${
-                msg.papel === 'usuario'
-                  ? 'ml-4 bg-emerald-500/10 text-emerald-100'
-                  : 'mr-2 bg-rl-card text-slate-300'
-              }`}
+              className={msg.papel === 'usuario' ? 'ia-msg-usuario' : 'ia-msg-assistente'}
             >
               {msg.texto.split('\n').map((linha, i) => (
                 <p key={i} className={i > 0 ? 'mt-1.5' : ''}>
@@ -279,7 +266,7 @@ export function InsightsPanel({ insights }: InsightsPanelProps) {
               type="button"
               onClick={() => void enviar(s)}
               disabled={carregando}
-              className="rounded-full border border-rl-border px-2 py-0.5 text-[9px] text-slate-500 transition hover:border-emerald-500/40 hover:text-emerald-400 disabled:opacity-50"
+              className="ia-chip"
             >
               {s}
             </button>

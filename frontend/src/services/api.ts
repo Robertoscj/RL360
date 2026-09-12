@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { corrigirTextos } from '@/utils/textoEncoding'
 
 const baseURL = import.meta.env.VITE_API_URL ?? ''
 
@@ -28,7 +29,10 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    if (res.data !== undefined) res.data = corrigirTextos(res.data)
+    return res
+  },
   async (error) => {
     const original = error.config
     if (error.response?.status === 401 && !original._retry && refreshHandler) {

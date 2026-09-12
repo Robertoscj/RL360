@@ -88,7 +88,7 @@ export function CardsKpiFaturamento({ dados, variacaoDia = 0 }: Props) {
       {cards.map(({ rotulo, valor, detalhe, detalheCor, icone: Icone, accent, corIcone, corValor }) => (
         <div key={rotulo} className={`kpi-card flex h-full flex-col justify-between p-3.5 ${accent}`}>
           <div className="flex items-start justify-between gap-2">
-            <p className="text-[10px] font-bold uppercase leading-tight tracking-wide text-slate-500">{rotulo}</p>
+            <p className="section-label leading-tight">{rotulo}</p>
             <div className={`shrink-0 rounded-lg p-1.5 ${corIcone}`}>
               <Icone className="h-4 w-4" />
             </div>
@@ -96,7 +96,7 @@ export function CardsKpiFaturamento({ dados, variacaoDia = 0 }: Props) {
           <p className={`mt-3 text-[17px] font-black leading-none tracking-tight sm:text-[18px] ${corValor}`}>
             {valor}
           </p>
-          <p className={`mt-2 text-[11px] font-semibold leading-snug ${detalheCor}`}>{detalhe}</p>
+          <p className={`mt-2 text-xs font-semibold leading-snug ${detalheCor}`}>{detalhe}</p>
         </div>
       ))}
     </div>

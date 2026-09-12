@@ -9,7 +9,7 @@ import {
 } from 'recharts'
 import { formatarMoeda } from '@/utils/format'
 import { useTheme } from '@/hooks/useTheme'
-import { corGridGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
+import { corGridGrafico, corTickGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
 import type { RegistroInadimplencia } from '@/types/inadimplencia'
 
 interface Props {
@@ -20,6 +20,7 @@ export function GraficoRecuperacaoVsPerda({ registros }: Props) {
   const { tema } = useTheme()
   const tooltipStyle = estilosTooltipGrafico(tema)
   const gridColor = corGridGrafico(tema)
+  const tickColor = corTickGrafico(tema)
   const dados = [...registros]
     .sort((a, b) => b.valor - a.valor)
     .map((r) => ({
@@ -30,8 +31,8 @@ export function GraficoRecuperacaoVsPerda({ registros }: Props) {
 
   return (
     <div className="glass-card p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Recuperação vs perda</p>
-      <p className="text-[11px] text-slate-600">Valor recuperável e perda projetada por cliente</p>
+      <p className="section-label">Recuperação vs perda</p>
+      <p className="section-desc">Valor recuperável e perda projetada por cliente</p>
 
       <div className="mt-4 h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -43,7 +44,7 @@ export function GraficoRecuperacaoVsPerda({ registros }: Props) {
             <CartesianGrid stroke={gridColor} strokeDasharray="3 3" horizontal={false} />
             <XAxis
               type="number"
-              tick={{ fill: '#64748b', fontSize: 9 }}
+              tick={{ fill: tickColor, fontSize: 9 }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
@@ -52,7 +53,7 @@ export function GraficoRecuperacaoVsPerda({ registros }: Props) {
               type="category"
               dataKey="nome"
               width={100}
-              tick={{ fill: '#64748b', fontSize: 9 }}
+              tick={{ fill: tickColor, fontSize: 9 }}
               axisLine={false}
               tickLine={false}
             />
@@ -69,7 +70,7 @@ export function GraficoRecuperacaoVsPerda({ registros }: Props) {
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-3 flex gap-4 text-[10px] text-slate-500">
+      <div className="mt-3 flex gap-4 text-xs font-medium text-rl-body">
         <span className="flex items-center gap-1.5">
           <span className="h-2 w-3 rounded-sm bg-emerald-500" /> Recuperável
         </span>

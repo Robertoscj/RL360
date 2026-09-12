@@ -7,7 +7,7 @@ export function estilosTooltipGrafico(tema: TemaAplicacao) {
       border: '1px solid #e2e8f0',
       borderRadius: 8,
       fontSize: 11,
-      color: '#334155',
+      color: '#1e293b',
       boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)',
     }
   }
@@ -25,7 +25,7 @@ export function corGridGrafico(tema: TemaAplicacao) {
 }
 
 export function corTickGrafico(tema: TemaAplicacao) {
-  return tema === 'light' ? '#64748b' : '#64748b'
+  return tema === 'light' ? '#1e293b' : '#94a3b8'
 }
 
 export function corHubRadar(tema: TemaAplicacao) {

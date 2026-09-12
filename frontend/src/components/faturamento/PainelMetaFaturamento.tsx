@@ -13,8 +13,8 @@ export function PainelMetaFaturamento({ dados }: Props) {
 
   return (
     <div className="glass-card flex h-full flex-col p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Progresso da meta</p>
-      <p className="text-[11px] text-slate-600">Acompanhamento mensal em tempo real</p>
+      <p className="section-label">Progresso da meta</p>
+      <p className="section-desc">Acompanhamento mensal em tempo real</p>
 
       <div className="relative mx-auto my-4 flex h-[120px] w-[120px] items-center justify-center">
         <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
@@ -33,29 +33,29 @@ export function PainelMetaFaturamento({ dados }: Props) {
         </svg>
         <div className="text-center">
           <p className="text-3xl font-black text-emerald-400">{formatarPercentual(pct, 0)}</p>
-          <p className="text-[10px] text-slate-500">atingido</p>
+          <p className="text-xs font-medium text-rl-body">atingido</p>
         </div>
       </div>
 
       <div className="space-y-3">
-        <div className="flex justify-between text-[11px]">
-          <span className="text-slate-500">Realizado</span>
+        <div className="flex justify-between text-xs">
+          <span className="font-medium text-rl-body">Realizado</span>
           <span className="font-bold text-rl-heading">{formatarMoeda(dados.faturamentoMes)}</span>
         </div>
-        <div className="flex justify-between text-[11px]">
-          <span className="text-slate-500">Meta</span>
+        <div className="flex justify-between text-xs">
+          <span className="font-medium text-rl-body">Meta</span>
           <span className="font-bold text-blue-400">{formatarMoeda(dados.metaMensal)}</span>
         </div>
-        <div className="flex justify-between text-[11px]">
-          <span className="text-slate-500">Falta</span>
+        <div className="flex justify-between text-xs">
+          <span className="font-medium text-rl-body">Falta</span>
           <span className="font-bold text-amber-400">{formatarMoeda(falta)}</span>
         </div>
         <div className="rounded-lg border border-rl-border bg-rl-surface/60 p-3">
-          <p className="text-[9px] font-bold uppercase tracking-wide text-slate-500">Para bater a meta</p>
+          <p className="section-label">Para bater a meta</p>
           <p className="mt-1 text-[13px] font-black text-rl-heading">
-            {formatarMoeda(mediaNecessaria)}<span className="text-[10px] font-normal text-slate-500">/dia</span>
+            {formatarMoeda(mediaNecessaria)}<span className="text-xs font-medium text-rl-body">/dia</span>
           </p>
-          <p className="mt-0.5 text-[10px] text-slate-600">{diasRestantes} dias restantes no mês</p>
+          <p className="mt-0.5 text-xs font-medium text-rl-body">{diasRestantes} dias restantes no mês</p>
         </div>
       </div>
     </div>

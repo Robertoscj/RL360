@@ -10,7 +10,7 @@ import {
 } from 'recharts'
 import { formatarMoeda } from '@/utils/format'
 import { useTheme } from '@/hooks/useTheme'
-import { corGridGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
+import { corGridGrafico, corTickGrafico, estilosTooltipGrafico } from '@/utils/estilosGrafico'
 import type { PontoSerieTemporal } from '@/types/faturamento'
 
 interface Props {
@@ -21,23 +21,24 @@ export function GraficoFaturamentoDiario({ serie }: Props) {
   const { tema } = useTheme()
   const tooltipStyle = estilosTooltipGrafico(tema)
   const gridColor = corGridGrafico(tema)
+  const tickColor = corTickGrafico(tema)
   const dados = serie.slice(-30)
 
   return (
     <div className="glass-card flex h-full flex-col p-4">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+          <p className="section-label">
             Evolução diária
           </p>
-          <p className="text-[11px] text-slate-600">Faturamento vs meta diária no período</p>
+          <p className="section-desc">Faturamento vs meta diária no período</p>
         </div>
-        <div className="flex items-center gap-4 text-[10px]">
-          <span className="flex items-center gap-1.5 text-slate-500">
+        <div className="flex items-center gap-4 text-xs font-medium">
+          <span className="flex items-center gap-1.5 text-rl-body">
             <span className="h-0.5 w-4 rounded bg-emerald-500" />
             Faturamento
           </span>
-          <span className="flex items-center gap-1.5 text-slate-500">
+          <span className="flex items-center gap-1.5 text-rl-body">
             <span className="h-0.5 w-4 rounded border-t border-dashed border-slate-500" />
             Meta/dia
           </span>
@@ -56,13 +57,13 @@ export function GraficoFaturamentoDiario({ serie }: Props) {
             <CartesianGrid stroke={gridColor} strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="rotulo"
-              tick={{ fill: '#475569', fontSize: 9 }}
+              tick={{ fill: tickColor, fontSize: 9 }}
               axisLine={false}
               tickLine={false}
               interval="preserveStartEnd"
             />
             <YAxis
-              tick={{ fill: '#475569', fontSize: 9 }}
+              tick={{ fill: tickColor, fontSize: 9 }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${(Number(v) / 1000).toFixed(0)}k`}

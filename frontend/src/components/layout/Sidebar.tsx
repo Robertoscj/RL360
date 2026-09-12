@@ -47,7 +47,7 @@ export function Sidebar() {
           </div>
           <div className="min-w-0 pt-0.5">
             <p className="text-[15px] font-black uppercase tracking-wide text-rl-heading">LUCRO360</p>
-            <p className="mt-0.5 text-[10px] leading-snug text-rl-muted">
+            <p className="mt-0.5 text-[11px] font-medium leading-snug text-rl-body">
               Seu radar de lucro em tempo real
             </p>
           </div>
@@ -86,8 +86,8 @@ export function Sidebar() {
                     {rotulo}
                   </p>
                   <p
-                    className={`truncate text-[10px] leading-tight ${
-                      isActive ? 'text-emerald-600' : 'text-rl-muted'
+                    className={`truncate text-[11px] font-medium leading-tight ${
+                      isActive ? 'text-emerald-600' : 'text-rl-body'
                     }`}
                   >
                     {subtitulo}
@@ -106,7 +106,7 @@ export function Sidebar() {
       <div className="p-4 pt-2">
         <div className="rounded-xl border border-rl-border bg-rl-sidebar-panel p-4">
           <p className="text-[12px] font-semibold text-rl-heading">Precisa de ajuda?</p>
-          <p className="mt-0.5 text-[10px] text-rl-muted">Fale com nosso suporte</p>
+          <p className="mt-0.5 text-[11px] font-medium text-rl-body">Fale com nosso suporte</p>
           <button
             type="button"
             className="mt-3 w-full rounded-lg border border-emerald-500/35 bg-emerald-500/[0.06] py-2.5 text-[11px] font-bold text-emerald-600 transition hover:border-emerald-500/50 hover:bg-emerald-500/10"

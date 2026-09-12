@@ -1,5 +1,6 @@
-import type { PontoSerieTemporal } from '@/types/dashboard'
+import type { CardsTopo, FatorRadar, PontoSerieTemporal } from '@/types/dashboard'
 import type { Venda } from '@/types/faturamento'
+import { formatarMoedaLeitura } from '@/utils/format'
 
 export function calcularDeltaPercentual(valorAtual: number, valorReferencia: number): string | null {
   if (valorReferencia === 0) return null
@@ -62,4 +63,79 @@ export function badgeStatusSaude(statusSaude: string, percentual: number) {
 
 export function metaSaudePercentual(percentual: number) {
   return Math.min(100, Math.max(percentual + 14, 85))
+}
+
+function juntarDois(itens: string[]) {
+  if (itens.length === 0) return ''
+  if (itens.length === 1) return itens[0]
+  return `${itens[0]} e ${itens[1]}`
+}
+
+export function rotulosFatoresNegativos(fatores: FatorRadar[], limite = 2): string {
+  const lista = [...fatores]
+    .filter((f) => f.impactoFinanceiro < 0)
+    .sort((a, b) => a.impactoFinanceiro - b.impactoFinanceiro)
+    .slice(0, limite)
+    .map((f) => f.rotulo.toLowerCase())
+  return juntarDois(lista)
+}
+
+export function montarCausasCards(cards: CardsTopo, fatores: FatorRadar[]) {
+  const negativos = rotulosFatoresNegativos(fatores)
+  const badge = badgeStatusSaude(cards.statusSaude, cards.saudeEmpresaPercentual)
+  const gargaloTxt =
+    cards.gargalosCriticos === 1
+      ? '1 ponto crítico está travando a margem agora.'
+      : `${cards.gargalosCriticos} pontos críticos estão travando a margem agora.`
+
+  return {
+    risco: negativos
+      ? `A perda está concentrada em ${negativos}.`
+      : 'Principais ameaças identificadas nos próximos 30 dias.',
+    oportunidade: 'Pipeline pronto para converter nesta semana.',
+    gargalos: cards.gargalosCriticos > 0 ? gargaloTxt : 'Nenhum gargalo crítico no momento.',
+    saude:
+      badge.rotulo === 'Saudável'
+        ? 'Empresa no ritmo, com pontos de atenção ainda abertos.'
+        : 'Conversão e cobrança estão puxando a saúde para baixo.',
+  }
+}
+
+export function montarFraseDono(params: {
+  risco: number
+  oportunidade: number
+  quantidadeAcoes: number
+}) {
+  const { risco, oportunidade, quantidadeAcoes } = params
+  const acoesTxt =
+    quantidadeAcoes === 1
+      ? '1 ação já está priorizada'
+      : quantidadeAcoes > 1
+        ? `${quantidadeAcoes} ações já estão priorizadas`
+        : 'o radar já isolou a causa'
+
+  if (risco > 0 && risco >= oportunidade) {
+    return {
+      tom: 'risco' as const,
+      texto: `Hoje você pode perder ${formatarMoedaLeitura(risco)} nos próximos 30 dias — ${acoesTxt}.`,
+      acao: 'Ver o que fazer',
+      rota: '/inadimplencia',
+    }
+  }
+
+  if (oportunidade > 0) {
+    return {
+      tom: 'oportunidade' as const,
+      texto: `Há ${formatarMoedaLeitura(oportunidade)} em oportunidade pronta para converter — ${acoesTxt}.`,
+      acao: 'Priorizar fechamento',
+      rota: '/vendas',
+    }
+  }
+
+  return {
+    tom: 'neutro' as const,
+    texto: 'Radar estável neste período — acompanhe o plano para proteger a margem.',
+    acao: 'Ver alertas',
+    rota: '/alertas',
+  }
 }

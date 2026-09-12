@@ -113,12 +113,12 @@ export function SeletorPeriodo() {
         aria-expanded={aberto}
         aria-haspopup="dialog"
       >
-        <Calendar className="h-3.5 w-3.5 text-slate-500" />
-        <span className="hidden text-slate-400 sm:inline">Período:</span>
-        <span className="max-w-[180px] truncate text-slate-300 sm:max-w-none">
+        <Calendar className="h-3.5 w-3.5 text-rl-body" />
+        <span className="hidden font-medium text-rl-body sm:inline">Período:</span>
+        <span className="max-w-[180px] truncate font-semibold text-rl-heading sm:max-w-none">
           {formatarPeriodo(periodo.inicio, periodo.fim)}
         </span>
-        <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition ${aberto ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-rl-muted transition ${aberto ? 'rotate-180' : ''}`} />
       </button>
 
       {aberto && (
@@ -129,7 +129,7 @@ export function SeletorPeriodo() {
         >
           {/* Presets */}
           <div className="hidden w-[168px] shrink-0 border-r border-rl-border p-2 sm:block">
-            <p className="px-2 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+            <p className="section-label px-2 py-1.5">
               Atalhos
             </p>
             {PRESETS.map(({ id, rotulo }) => (
@@ -137,7 +137,7 @@ export function SeletorPeriodo() {
                 key={id}
                 type="button"
                 onClick={() => aplicarPreset(id)}
-                className="w-full rounded-lg px-2 py-2 text-left text-[11px] text-slate-400 transition hover:bg-rl-card hover:text-emerald-400"
+                className="w-full rounded-lg px-2 py-2 text-left text-xs font-medium text-rl-heading transition hover:bg-rl-card hover:text-emerald-600"
               >
                 {rotulo}
               </button>
@@ -148,8 +148,8 @@ export function SeletorPeriodo() {
           <div className="min-w-0 flex-1 p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Período personalizado</p>
-                <p className="text-xs font-semibold text-slate-200">
+                <p className="section-label">Período personalizado</p>
+                <p className="text-xs font-semibold text-rl-heading">
                   {formatarPeriodo(intervaloAtivo.inicio, intervaloAtivo.fim)}
                 </p>
               </div>
@@ -162,7 +162,7 @@ export function SeletorPeriodo() {
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <span className="min-w-[120px] text-center text-sm font-semibold text-slate-200">
+                <span className="min-w-[120px] text-center text-sm font-semibold text-rl-heading">
                   {NOMES_MESES[mes]} {ano}
                 </span>
                 <button
@@ -183,7 +183,7 @@ export function SeletorPeriodo() {
                   key={id}
                   type="button"
                   onClick={() => aplicarPreset(id)}
-                  className="shrink-0 rounded-full border border-rl-border px-2.5 py-1 text-[10px] text-slate-400 hover:border-emerald-500/40 hover:text-emerald-400"
+                  className="shrink-0 rounded-full border border-rl-border px-2.5 py-1 text-[10px] text-rl-body hover:border-emerald-500/40 hover:text-emerald-600"
                 >
                   {rotulo}
                 </button>
@@ -192,7 +192,7 @@ export function SeletorPeriodo() {
 
             <div className="grid grid-cols-7 gap-0.5">
               {NOMES_DIAS_CURTOS.map((d, i) => (
-                <div key={`${d}-${i}`} className="py-1 text-center text-[10px] font-semibold text-slate-600">
+                <div key={`${d}-${i}`} className="py-1 text-center text-[11px] font-bold text-rl-body">
                   {d}
                 </div>
               ))}
@@ -217,7 +217,7 @@ export function SeletorPeriodo() {
                     onMouseLeave={() => setHoverDia(null)}
                     className={[
                       'relative h-9 rounded-lg text-xs font-medium transition',
-                      futuro ? 'cursor-not-allowed text-slate-700' : 'text-slate-300 hover:bg-rl-card',
+                      futuro ? 'cursor-not-allowed text-rl-subtle' : 'text-rl-heading hover:bg-rl-card',
                       noIntervalo && !futuro ? 'bg-emerald-500/15 text-emerald-300' : '',
                       (ehInicio || ehFim) && !futuro ? 'bg-emerald-500 text-white hover:bg-emerald-400' : '',
                       hoje && !noIntervalo ? 'ring-1 ring-emerald-500/40' : '',
@@ -232,7 +232,7 @@ export function SeletorPeriodo() {
             {/* Inputs manuais */}
             <div className="mt-4 grid grid-cols-2 gap-3">
               <label className="block">
-                <span className="mb-1 block text-[10px] font-semibold uppercase text-slate-500">De</span>
+                <span className="mb-1 block text-[11px] font-bold uppercase text-rl-heading">De</span>
                 <input
                   type="date"
                   value={paraIsoData(intervaloAtivo.inicio)}
@@ -247,7 +247,7 @@ export function SeletorPeriodo() {
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-[10px] font-semibold uppercase text-slate-500">Até</span>
+                <span className="mb-1 block text-[11px] font-bold uppercase text-rl-heading">Até</span>
                 <input
                   type="date"
                   value={paraIsoData(intervaloAtivo.fim)}

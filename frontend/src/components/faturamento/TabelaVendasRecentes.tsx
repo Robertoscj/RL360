@@ -16,8 +16,8 @@ export function TabelaVendasRecentes({ vendas }: Props) {
 
   return (
     <div className="glass-card flex h-full flex-col p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Vendas recentes</p>
-      <p className="text-[11px] text-slate-600">Últimas operações registradas</p>
+      <p className="section-label">Vendas recentes</p>
+      <p className="section-desc">Últimas operações registradas</p>
 
       {ordenadas.length === 0 ? (
         <p className="mt-8 text-center text-[12px] text-slate-500">Nenhuma venda no período.</p>

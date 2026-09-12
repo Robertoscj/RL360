@@ -1,22 +1,25 @@
 import { Link } from 'react-router-dom'
 import { AlertTriangle, ChevronRight, HeartPulse, Target, Zap } from 'lucide-react'
 import { MoedaAnimada, NumeroAnimado, PercentualAnimado } from '@/components/ui/ValorAnimado'
-import { badgeStatusSaude, metaSaudePercentual } from '@/utils/dashboardMetricas'
+import { badgeStatusSaude, metaSaudePercentual, montarCausasCards } from '@/utils/dashboardMetricas'
 import { formatarPercentual } from '@/utils/format'
-import type { CardsTopo } from '@/types/dashboard'
+import type { CardsTopo, FatorRadar } from '@/types/dashboard'
 
 interface CardsTopoProps {
   cards: CardsTopo
+  fatores?: FatorRadar[]
   versaoAnimacao?: number
 }
 
-export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
+export function CardsTopoDashboard({ cards, fatores = [], versaoAnimacao }: CardsTopoProps) {
   const badge = badgeStatusSaude(cards.statusSaude, cards.saudeEmpresaPercentual)
   const metaSaude = metaSaudePercentual(cards.saudeEmpresaPercentual)
+  const causas = montarCausasCards(cards, fatores)
+  const saudeEmPiora = badge.rotulo !== 'Saudável'
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      <div className="kpi-card kpi-card-accent-red">
+      <div className={`kpi-card kpi-card-accent-red ${cards.riscoProximos30Dias > 0 ? 'rl-pulso-risco' : ''}`}>
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <p className="text-[10px] font-bold uppercase tracking-wide text-red-400/90">
@@ -25,17 +28,15 @@ export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
             <p className="mt-1.5 text-[26px] font-black leading-none text-red-400">
               <MoedaAnimada valor={cards.riscoProximos30Dias} reiniciarChave={versaoAnimacao} />
             </p>
-            <p className="mt-2 text-[11px] leading-snug text-slate-500">
-              Principais ameaças identificadas nos próximos 30 dias
-            </p>
+            <p className="kpi-desc">{causas.risco}</p>
             <Link
               to="/inadimplencia"
               className="mt-3 inline-flex items-center gap-0.5 text-[11px] font-semibold text-red-400 hover:text-red-300"
             >
-              Ver detalhes <ChevronRight className="h-3 w-3" />
+              Cobrar e proteger o caixa <ChevronRight className="h-3 w-3" />
             </Link>
           </div>
-          <div className="rounded-lg bg-red-500/10 p-2 text-red-400">
+          <div className={`rounded-lg bg-red-500/10 p-2 text-red-400 ${cards.riscoProximos30Dias > 0 ? 'rl-icone-alerta' : ''}`}>
             <AlertTriangle className="h-5 w-5" />
           </div>
         </div>
@@ -50,14 +51,12 @@ export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
             <p className="mt-1.5 text-[26px] font-black leading-none text-emerald-400">
               <MoedaAnimada valor={cards.valorOportunidade} reiniciarChave={versaoAnimacao} />
             </p>
-            <p className="mt-2 text-[11px] leading-snug text-slate-500">
-              Potencial de ganho com ações recomendadas
-            </p>
+            <p className="kpi-desc">{causas.oportunidade}</p>
             <Link
               to="/vendas"
               className="mt-3 inline-flex items-center gap-0.5 text-[11px] font-semibold text-emerald-400 hover:text-emerald-300"
             >
-              Ver oportunidades <ChevronRight className="h-3 w-3" />
+              Priorizar fechamento <ChevronRight className="h-3 w-3" />
             </Link>
           </div>
           <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-400">
@@ -75,17 +74,15 @@ export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
             <p className="mt-1.5 text-[26px] font-black leading-none text-amber-400">
               <NumeroAnimado valor={cards.gargalosCriticos} reiniciarChave={versaoAnimacao} />
             </p>
-            <p className="mt-2 text-[11px] leading-snug text-slate-500">
-              Pontos críticos que reduzem sua margem
-            </p>
+            <p className="kpi-desc">{causas.gargalos}</p>
             <Link
               to="/gargalos"
               className="mt-3 inline-flex items-center gap-0.5 text-[11px] font-semibold text-amber-400 hover:text-amber-300"
             >
-              Ver gargalos <ChevronRight className="h-3 w-3" />
+              Destravar agora <ChevronRight className="h-3 w-3" />
             </Link>
           </div>
-          <div className="rounded-lg bg-amber-500/10 p-2 text-amber-400">
+          <div className={`rounded-lg bg-amber-500/10 p-2 text-amber-400 ${cards.gargalosCriticos > 0 ? 'rl-icone-alerta' : ''}`}>
             <Zap className="h-5 w-5" />
           </div>
         </div>
@@ -105,6 +102,7 @@ export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
                 {badge.rotulo}
               </span>
             </div>
+            <p className="kpi-desc">{causas.saude}</p>
             <div className="mt-3">
               <div className="relative h-2.5 overflow-hidden rounded-full">
                 <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500" />
@@ -119,8 +117,14 @@ export function CardsTopoDashboard({ cards, versaoAnimacao }: CardsTopoProps) {
                 <span>100%</span>
               </div>
             </div>
+            <Link
+              to="/alertas"
+              className="mt-3 inline-flex items-center gap-0.5 text-[11px] font-semibold text-blue-400 hover:text-blue-300"
+            >
+              Ver o que puxa a saúde <ChevronRight className="h-3 w-3" />
+            </Link>
           </div>
-          <div className="rounded-lg bg-blue-500/10 p-2 text-blue-400">
+          <div className={`rounded-lg bg-blue-500/10 p-2 text-blue-400 ${saudeEmPiora ? 'rl-icone-alerta' : ''}`}>
             <HeartPulse className="h-5 w-5" />
           </div>
         </div>

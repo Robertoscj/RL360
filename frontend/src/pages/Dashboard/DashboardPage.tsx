@@ -3,6 +3,7 @@ import { Radio } from 'lucide-react'
 import { Topbar } from '@/components/layout/Topbar'
 import { RodapeBanner } from '@/components/layout/RodapeBanner'
 import { CardsTopoDashboard } from '@/components/cards/CardsTopoDashboard'
+import { FraseDonoDashboard } from '@/components/cards/FraseDonoDashboard'
 import { MetricasSparkline } from '@/components/cards/MetricasSparkline'
 import { RadarLucroHexagonal } from '@/components/radar/RadarLucroHexagonal'
 import { PrevisaoCard } from '@/components/charts/PrevisaoCard'
@@ -171,6 +172,7 @@ export function DashboardPage() {
   return (
     <div className="min-h-screen bg-rl-bg">
       <Topbar
+        subtitulo="O que está tirando ou gerando lucro agora"
         onAtualizar={() => void atualizar()}
         atualizando={atualizando}
       />
@@ -182,21 +184,31 @@ export function DashboardPage() {
 
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-emerald-400">
-            <Radio className={`h-3 w-3 ${atualizando ? 'animate-spin' : 'animate-pulse'}`} />
+            <Radio className={`h-3 w-3 ${atualizando ? 'animate-spin' : ''}`} />
             {atualizando ? 'Atualizando radar...' : 'Radar ao vivo'}
           </span>
-          <span className="text-[10px] text-rl-muted">
+          <span className="text-xs font-medium text-rl-body">
             Última atualização: {formatarHorario(resumo.geradoEmUtc)}
             {' · '}
             automática a cada 60s
           </span>
         </div>
 
+        <FraseDonoDashboard
+          risco={resumo.cardsTopo.riscoProximos30Dias}
+          oportunidade={resumo.cardsTopo.valorOportunidade}
+          quantidadeAcoes={resumo.rodape.quantidadeAcoesPlano}
+        />
+
         <div
           key={versaoAnimacao}
           className={`space-y-4 transition-opacity duration-300 ${atualizando ? 'opacity-70' : 'opacity-100'}`}
         >
-          <CardsTopoDashboard cards={resumo.cardsTopo} versaoAnimacao={versaoAnimacao} />
+          <CardsTopoDashboard
+            cards={resumo.cardsTopo}
+            fatores={resumo.radar.fatores}
+            versaoAnimacao={versaoAnimacao}
+          />
 
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
             <div className="xl:col-span-2">

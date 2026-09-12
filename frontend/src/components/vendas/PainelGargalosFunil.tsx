@@ -25,8 +25,8 @@ export function PainelGargalosFunil({ etapas }: Props) {
 
   return (
     <div className="glass-card flex h-full flex-col p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Gargalos do funil</p>
-      <p className="text-[11px] text-slate-600">Etapas com maior queda de conversão</p>
+      <p className="section-label">Gargalos do funil</p>
+      <p className="section-desc">Etapas com maior queda de conversão</p>
 
       {pior && (
         <div className="mt-4 rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3">
@@ -35,11 +35,11 @@ export function PainelGargalosFunil({ etapas }: Props) {
             <div>
               <p className="text-[10px] font-bold uppercase text-amber-400">Maior gargalo</p>
               <p className="mt-1 text-[13px] font-bold text-rl-heading">{pior.nome}</p>
-              <p className="mt-1 text-[11px] text-slate-400">
+              <p className="mt-1 text-xs font-medium text-rl-body">
                 Conversão {formatarPercentual(pior.taxaAtual, 1)} vs meta {formatarPercentual(pior.taxaMeta, 1)}
               </p>
               <p className="mt-2 text-sm font-black text-red-400">▼ {pior.queda.toFixed(1)} pontos percentuais</p>
-              <p className="mt-1 text-[10px] text-slate-500">
+              <p className="mt-1 text-xs font-medium text-rl-body">
                 Impacto estimado: {formatarMoeda(pior.valorPotencial * (pior.queda / 100))} em risco
               </p>
             </div>
@@ -54,12 +54,12 @@ export function PainelGargalosFunil({ etapas }: Props) {
             className="flex items-center justify-between rounded-lg border border-rl-border bg-rl-surface/50 px-3 py-2.5"
           >
             <div>
-              <p className="text-[11px] font-semibold text-slate-200">{e.nome}</p>
-              <p className="text-[10px] text-slate-500">{e.quantidade} oportunidades</p>
+              <p className="text-xs font-semibold text-rl-heading">{e.nome}</p>
+              <p className="text-xs font-medium text-rl-body">{e.quantidade} oportunidades</p>
             </div>
             <div className="text-right">
-              <p className="text-[11px] font-bold text-red-400">-{e.queda.toFixed(1)}pp</p>
-              <p className="text-[9px] text-slate-600">{formatarMoeda(e.valorPotencial)}</p>
+              <p className="text-xs font-bold text-red-400">-{e.queda.toFixed(1)}pp</p>
+              <p className="text-[11px] font-medium text-rl-body">{formatarMoeda(e.valorPotencial)}</p>
             </div>
           </div>
         ))}

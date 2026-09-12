@@ -97,10 +97,10 @@ export function CardsKpiVendas({ resumo, funil, conversaoGeral, quedaConversao }
         <div key={rotulo} className={`kpi-card ${accent}`}>
           <div className="flex items-start justify-between">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{rotulo}</p>
+              <p className="section-label">{rotulo}</p>
               <p className={`mt-1.5 text-[22px] font-black leading-none ${corValor}`}>{valor}</p>
-              <p className={`mt-1 text-[11px] font-semibold ${detalheCor}`}>{detalhe}</p>
-              <p className="mt-2 text-[10px] leading-snug text-slate-600">{descricao}</p>
+              <p className={`mt-1 text-xs font-semibold ${detalheCor}`}>{detalhe}</p>
+              <p className="kpi-desc">{descricao}</p>
             </div>
             <div className={`shrink-0 rounded-lg p-2 ${corIcone}`}>
               <Icone className="h-5 w-5" />

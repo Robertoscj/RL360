@@ -31,7 +31,7 @@ export function Topbar({
     <header className="flex h-[60px] items-center justify-between border-b border-rl-border bg-rl-bg px-5">
       <div>
         <h1 className="text-sm font-bold uppercase tracking-wide text-rl-heading">{titulo}</h1>
-        <p className="text-[11px] text-rl-muted">{subtitulo}</p>
+        <p className="text-xs font-medium text-rl-body">{subtitulo}</p>
       </div>
 
       <div className="flex items-center gap-3">

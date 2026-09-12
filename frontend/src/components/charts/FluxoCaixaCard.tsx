@@ -15,8 +15,8 @@ export function FluxoCaixaCard({ fluxo }: FluxoCaixaCardProps) {
 
   return (
     <div className="glass-card p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Fluxo de Caixa Futuro</p>
-      <p className="text-[11px] text-slate-600">Próximos {fluxo.dias} dias</p>
+      <p className="section-label">Fluxo de Caixa Futuro</p>
+      <p className="section-desc">Próximos {fluxo.dias} dias</p>
 
       <div className="relative mx-auto mt-4 h-[140px] w-[140px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -37,14 +37,14 @@ export function FluxoCaixaCard({ fluxo }: FluxoCaixaCardProps) {
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-2xl font-black text-emerald-400">{fluxo.percentualSaudavel}%</span>
-          <span className="text-[10px] font-medium text-slate-500">Saudável</span>
+          <span className="text-xs font-semibold text-rl-body">Saudável</span>
         </div>
       </div>
 
       <div className="mt-4 space-y-2.5">
         {itens.map(({ rotulo, valor, cor, text }) => (
-          <div key={rotulo} className="flex items-center justify-between text-[11px]">
-            <span className="flex items-center gap-2 text-slate-500">
+          <div key={rotulo} className="flex items-center justify-between text-xs">
+            <span className="flex items-center gap-2 font-medium text-rl-heading">
               <span className="h-2 w-2 rounded-full" style={{ background: cor }} />
               {rotulo}
             </span>
