@@ -1,0 +1,17 @@
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.csproj.AssemblyReference.cache
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.AssemblyInfoInputs.cache
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.AssemblyInfo.cs
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.csproj.CoreCompileInputs.cache
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Application.deps.json
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Application.dll
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Application.pdb
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Domain.dll
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Shared.dll
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Domain.pdb
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/bin/Debug/net10.0/RL360.Shared.pdb
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Ap.21C3DBF3.Up2Date
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.dll
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/refint/RL360.Application.dll
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/RL360.Application.pdb
+/Users/robertosilva/Desktop/RL360/backend/src/RL360.Application/obj/Debug/net10.0/ref/RL360.Application.dll

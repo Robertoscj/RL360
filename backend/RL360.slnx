@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RL360.Api/RL360.Api.csproj" />
+    <Project Path="src/RL360.Application/RL360.Application.csproj" />
+    <Project Path="src/RL360.Domain/RL360.Domain.csproj" />
+    <Project Path="src/RL360.Infrastructure/RL360.Infrastructure.csproj" />
+    <Project Path="src/RL360.Shared/RL360.Shared.csproj" />
+    <Project Path="src/RL360.Worker/RL360.Worker.csproj" />
+  </Folder>
+</Solution>
