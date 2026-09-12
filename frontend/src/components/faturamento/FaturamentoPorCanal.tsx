@@ -25,7 +25,7 @@ export function FaturamentoPorCanal({ vendas }: Props) {
   const total = porCanal.reduce((s, c) => s + c.valor, 0)
 
   return (
-    <div className="glass-card p-4">
+    <div className="glass-card flex h-full flex-col p-4">
       <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Faturamento por canal</p>
       <p className="text-[11px] text-slate-600">Distribuição da receita no mês</p>
 

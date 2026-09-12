@@ -9,9 +9,11 @@ import { ResumoLucroCustos } from '@/components/faturamento/ResumoLucroCustos'
 import { FaturamentoPorCanal } from '@/components/faturamento/FaturamentoPorCanal'
 import { TabelaVendasRecentes } from '@/components/faturamento/TabelaVendasRecentes'
 import { obterFaturamento, obterVendas } from '@/services/faturamentoService'
+import { usePeriodo } from '@/hooks/usePeriodo'
 import type { Faturamento, Venda } from '@/types/faturamento'
 
 export function FaturamentoPage() {
+  const { periodo } = usePeriodo()
   const [faturamento, setFaturamento] = useState<Faturamento | null>(null)
   const [vendas, setVendas] = useState<Venda[]>([])
   const [erro, setErro] = useState('')
@@ -24,7 +26,7 @@ export function FaturamentoPage() {
       if (forcar) setAtualizando(true)
       else setCarregando(true)
 
-      const [fat, vds] = await Promise.all([obterFaturamento(), obterVendas()])
+      const [fat, vds] = await Promise.all([obterFaturamento(periodo), obterVendas(periodo)])
       setFaturamento(fat)
       setVendas(vds)
     } catch (err) {
@@ -33,7 +35,7 @@ export function FaturamentoPage() {
       setCarregando(false)
       setAtualizando(false)
     }
-  }, [])
+  }, [periodo])
 
   useEffect(() => {
     void carregar()
@@ -94,17 +96,17 @@ export function FaturamentoPage() {
 
         <CardsKpiFaturamento dados={faturamento} variacaoDia={variacaoDia} />
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
+        <div className="grid grid-cols-1 items-stretch gap-4 xl:grid-cols-12">
           <div className="xl:col-span-8">
             <GraficoFaturamentoDiario serie={faturamento.serieDiaria} />
           </div>
-          <div className="xl:col-span-4 space-y-4">
+          <div className="xl:col-span-4">
             <PainelMetaFaturamento dados={faturamento} />
-            <ResumoLucroCustos dados={faturamento} />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          <ResumoLucroCustos dados={faturamento} />
           <FaturamentoPorCanal vendas={vendas} />
           <TabelaVendasRecentes vendas={vendas} />
         </div>

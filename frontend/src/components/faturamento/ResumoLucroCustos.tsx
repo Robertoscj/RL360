@@ -9,9 +9,16 @@ export function ResumoLucroCustos({ dados }: Props) {
   const margem = dados.faturamentoMes > 0 ? (dados.lucro / dados.faturamentoMes) * 100 : 0
   const pctCusto = dados.faturamentoMes > 0 ? (dados.custoMes / dados.faturamentoMes) * 100 : 0
   const pctLucro = 100 - pctCusto
+  const lucroPorReal = dados.faturamentoMes > 0 ? dados.lucro / dados.faturamentoMes : 0
+  const lucroPorRealTexto = lucroPorReal.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
 
   return (
-    <div className="glass-card p-4">
+    <div className="glass-card flex h-full flex-col p-4">
       <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Lucro vs custo</p>
       <p className="text-[11px] text-slate-600">Composição do resultado mensal</p>
 
@@ -42,8 +49,7 @@ export function ResumoLucroCustos({ dados }: Props) {
       <div className="mt-4 rounded-lg border border-rl-border bg-rl-surface/50 p-3">
         <p className="text-[10px] text-slate-400">
           Cada <strong className="text-emerald-400">R$ 1,00</strong> de faturamento gera{' '}
-          <strong className="text-rl-heading">{formatarMoeda(dados.faturamentoMes > 0 ? dados.lucro / dados.faturamentoMes : 0)}</strong>{' '}
-          de lucro líquido neste período.
+          <strong className="text-rl-heading">{lucroPorRealTexto}</strong> de lucro líquido neste período.
         </p>
       </div>
     </div>

@@ -24,13 +24,13 @@ export function GraficoFaturamentoDiario({ serie }: Props) {
   const dados = serie.slice(-30)
 
   return (
-    <div className="glass-card p-4">
+    <div className="glass-card flex h-full flex-col p-4">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
             Evolução diária
           </p>
-          <p className="text-[11px] text-slate-600">Últimos 30 dias — faturamento vs meta diária</p>
+          <p className="text-[11px] text-slate-600">Faturamento vs meta diária no período</p>
         </div>
         <div className="flex items-center gap-4 text-[10px]">
           <span className="flex items-center gap-1.5 text-slate-500">
@@ -44,7 +44,7 @@ export function GraficoFaturamentoDiario({ serie }: Props) {
         </div>
       </div>
 
-      <div className="h-[280px]">
+      <div className="min-h-[260px] flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={dados} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
             <defs>

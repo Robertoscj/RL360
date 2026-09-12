@@ -16,7 +16,7 @@ export function PainelMetaFaturamento({ dados }: Props) {
       <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Progresso da meta</p>
       <p className="text-[11px] text-slate-600">Acompanhamento mensal em tempo real</p>
 
-      <div className="relative mx-auto my-6 flex h-[140px] w-[140px] items-center justify-center">
+      <div className="relative mx-auto my-4 flex h-[120px] w-[120px] items-center justify-center">
         <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="42" fill="none" stroke="#1e2836" strokeWidth="8" />
           <circle

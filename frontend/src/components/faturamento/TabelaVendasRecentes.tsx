@@ -15,12 +15,15 @@ export function TabelaVendasRecentes({ vendas }: Props) {
   )
 
   return (
-    <div className="glass-card p-4">
+    <div className="glass-card flex h-full flex-col p-4">
       <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Vendas recentes</p>
       <p className="text-[11px] text-slate-600">Últimas operações registradas</p>
 
+      {ordenadas.length === 0 ? (
+        <p className="mt-8 text-center text-[12px] text-slate-500">Nenhuma venda no período.</p>
+      ) : (
       <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[480px] text-left">
+        <table className="w-full text-left">
           <thead>
             <tr className="border-b border-rl-border text-[9px] font-bold uppercase tracking-wide text-slate-600">
               <th className="pb-2 pr-3">Canal</th>
@@ -53,6 +56,7 @@ export function TabelaVendasRecentes({ vendas }: Props) {
           </tbody>
         </table>
       </div>
+      )}
     </div>
   )
 }

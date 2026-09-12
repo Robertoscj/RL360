@@ -216,7 +216,7 @@ export function DashboardPage() {
               <FluxoCaixaCard fluxo={resumo.fluxoCaixaFuturo} />
             </div>
 
-            <div className="xl:col-span-3">
+            <div className="h-[460px] xl:col-span-3">
               <InsightsPanel insights={resumo.insights} />
             </div>
           </div>

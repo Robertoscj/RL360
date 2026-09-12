@@ -9,12 +9,15 @@ import { GraficoRecuperacaoVsPerda } from '@/components/inadimplencia/GraficoRec
 import { PainelContasCriticas } from '@/components/inadimplencia/PainelContasCriticas'
 import { TabelaDevedores } from '@/components/inadimplencia/TabelaDevedores'
 import { obterResumoDashboard } from '@/services/dashboardService'
+import { obterFaturamento } from '@/services/faturamentoService'
 import { obterInadimplencia } from '@/services/inadimplenciaService'
+import { usePeriodo } from '@/hooks/usePeriodo'
 import type { FluxoCaixaFuturo } from '@/types/dashboard'
 import type { RegistroInadimplencia } from '@/types/inadimplencia'
 import { agruparPorFaixa, calcularResumo } from '@/utils/inadimplencia'
 
 export function InadimplenciaPage() {
+  const { periodo } = usePeriodo()
   const [registros, setRegistros] = useState<RegistroInadimplencia[]>([])
   const [riscoProximos30Dias, setRiscoProximos30Dias] = useState<number | undefined>()
   const [faturamentoMes, setFaturamentoMes] = useState<number | undefined>()
@@ -29,14 +32,15 @@ export function InadimplenciaPage() {
       if (forcar) setAtualizando(true)
       else setCarregando(true)
 
-      const [inad, dashboard] = await Promise.all([
+      const [inad, dashboard, fat] = await Promise.all([
         obterInadimplencia(),
-        obterResumoDashboard(forcar),
+        obterResumoDashboard(forcar, periodo),
+        obterFaturamento(periodo),
       ])
 
       setRegistros(inad)
       setRiscoProximos30Dias(dashboard.cardsTopo.riscoProximos30Dias)
-      setFaturamentoMes(dashboard.radar.faturamentoMes)
+      setFaturamentoMes(fat.faturamentoMes)
       setFluxoCaixa(dashboard.fluxoCaixaFuturo)
     } catch (err) {
       setErro(err instanceof Error ? err.message : 'Erro ao carregar inadimplência')
@@ -44,7 +48,7 @@ export function InadimplenciaPage() {
       setCarregando(false)
       setAtualizando(false)
     }
-  }, [])
+  }, [periodo])
 
   useEffect(() => {
     void carregar()

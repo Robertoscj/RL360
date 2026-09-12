@@ -11,6 +11,8 @@ export interface Faturamento {
   percentualMetaAtingida: number
   custoMes: number
   lucro: number
+  quantidadeOperacoes: number
+  ticketMedio: number
   serieDiaria: PontoSerieTemporal[]
 }
 

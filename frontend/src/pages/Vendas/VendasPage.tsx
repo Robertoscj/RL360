@@ -9,6 +9,7 @@ import { FunilAoVivo } from '@/components/vendas/FunilAoVivo'
 import { GraficoConversaoEtapas } from '@/components/vendas/GraficoConversaoEtapas'
 import { PainelGargalosFunil } from '@/components/vendas/PainelGargalosFunil'
 import { obterFunil, obterVendasModulo } from '@/services/vendasService'
+import { usePeriodo } from '@/hooks/usePeriodo'
 import type { EtapaFunil, ResumoVendas, Venda } from '@/types/vendas'
 
 function calcularResumo(vendas: Venda[]): ResumoVendas {
@@ -43,6 +44,7 @@ function calcularConversao(funil: EtapaFunil[]) {
 }
 
 export function VendasPage() {
+  const { periodo } = usePeriodo()
   const [funil, setFunil] = useState<EtapaFunil[]>([])
   const [vendas, setVendas] = useState<Venda[]>([])
   const [erro, setErro] = useState('')
@@ -55,7 +57,7 @@ export function VendasPage() {
       if (forcar) setAtualizando(true)
       else setCarregando(true)
 
-      const [f, v] = await Promise.all([obterFunil(), obterVendasModulo()])
+      const [f, v] = await Promise.all([obterFunil(), obterVendasModulo(periodo)])
       setFunil(f)
       setVendas(v)
     } catch (err) {
@@ -64,7 +66,7 @@ export function VendasPage() {
       setCarregando(false)
       setAtualizando(false)
     }
-  }, [])
+  }, [periodo])
 
   useEffect(() => {
     void carregar()
